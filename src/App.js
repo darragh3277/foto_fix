@@ -13,6 +13,13 @@ class App extends Component {
     this.state = {
       image: null,
       selectedFilters: [],
+      sliderValues: [
+        { Brightness: 0 },
+        { Contrast: 0 },
+        { Blur: 0 },
+        { Saturation: 0 },
+        { Pixelate: 2 },
+      ],
     };
   }
 
@@ -25,7 +32,11 @@ class App extends Component {
   };
 
   handleSliderChange = (slider, value) => {
-    // value = value / 10;
+    let sliderValues = [...this.state.sliderValues];
+    let sliderIndex = sliderValues.findIndex(
+      (s) => s[slider.name] !== undefined
+    );
+    sliderValues[sliderIndex][slider.name] = value;
     let filters = [...this.state.selectedFilters];
     let index = filters.indexOf(slider);
     let settings = { [slider.control]: value };
@@ -37,6 +48,7 @@ class App extends Component {
     }
     this.setState({
       selectedFilters: filters,
+      sliderValues,
     });
   };
 
@@ -45,12 +57,26 @@ class App extends Component {
     this.setState({
       selectedFilters: [],
       image: null,
+      sliderValues: [
+        { Brightness: 0 },
+        { Contrast: 0 },
+        { Blur: 0 },
+        { Saturation: 0 },
+        { Pixelate: 2 },
+      ],
     });
   };
 
   handleResetImage = () => {
     this.setState({
       selectedFilters: [],
+      sliderValues: [
+        { Brightness: 0 },
+        { Contrast: 0 },
+        { Blur: 0 },
+        { Saturation: 0 },
+        { Pixelate: 2 },
+      ],
     });
   };
 
@@ -99,6 +125,7 @@ class App extends Component {
           <Controls
             img={this.state.image}
             selectedFilters={this.state.selectedFilters}
+            sliderValues={this.state.sliderValues}
             handleFilterToggle={this.handleFilterToggle}
             handleClearCanvas={this.handleClearCanvas}
             handleResetImage={this.handleResetImage}

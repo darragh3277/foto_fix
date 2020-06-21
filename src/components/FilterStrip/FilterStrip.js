@@ -16,7 +16,7 @@ const filterOptions = [
 export default ({ img, selectedFilters, handleFilterToggle }) => {
   let filterComponents = filterOptions.map((filter) => {
     return (
-      <Col xs={4} key={filter.id}>
+      <Col xs={12} sm={6} md={4} key={filter.id}>
         <FilterPreview
           filter={filter}
           img={img}
@@ -26,5 +26,5 @@ export default ({ img, selectedFilters, handleFilterToggle }) => {
       </Col>
     );
   });
-  return <Row className="justify-content-center">{filterComponents}</Row>;
+  return <Row className="">{filterComponents}</Row>;
 };

@@ -21,21 +21,25 @@ class FilterPreview extends Component {
   };
 
   render = () => {
-    let selected = "text-light";
+    let selected = "row justify-content-center text-light";
     if (this.props.selectedFilters.includes(this.props.filter))
-      selected = "text-primary";
+      selected = "row justify-content-center text-primary";
     return (
       <div
         onClick={() => this.props.handleFilterToggle(this.props.filter)}
         className={selected}
       >
         <canvas
-          className="border rounded"
+          className="border rounded col-12 p-0"
           height="100%"
           width="100%"
           id={"canvas_" + this.props.filter.name}
         />
-        <p className={"text-center mb-0 filter-preview-title " + selected}>
+        <p
+          className={
+            "text-center mb-0  col-12 p-0 filter-preview-title " + selected
+          }
+        >
           {this.props.filter.name}
         </p>
       </div>

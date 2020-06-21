@@ -6,6 +6,7 @@ import { Row, Button } from "reactstrap";
 export default ({
   img,
   selectedFilters,
+  sliderValues,
   handleFilterToggle,
   handleResetImage,
   handleClearCanvas,
@@ -21,7 +22,10 @@ export default ({
         />
       </Row>
       <Row className="mt-2">
-        <Sliders handleSliderChange={handleSliderChange} />
+        <Sliders
+          handleSliderChange={handleSliderChange}
+          sliderValues={sliderValues}
+        />
       </Row>
       <Row className="justify-content-center mt-2">
         <Button

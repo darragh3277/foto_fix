@@ -33,6 +33,15 @@ const sliders = [
   },
   {
     id: 4,
+    name: "Saturation",
+    control: "saturation",
+    min: -1,
+    max: 1,
+    step: 0.1,
+    defaultValue: 0,
+  },
+  {
+    id: 5,
     name: "Pixelate",
     control: "blocksize",
     min: 2,
@@ -42,11 +51,17 @@ const sliders = [
   },
 ];
 
-export default ({ handleSliderChange }) => {
+export default ({ handleSliderChange, sliderValues }) => {
   let sliderComponents = sliders.map((slider) => {
+    let index = sliderValues.findIndex((s) => s[slider.name] !== undefined);
+    let value = sliderValues[index][slider.name];
     return (
       <Col key={slider.id} xs={12} md={6}>
-        <Slider slider={slider} handleSliderChange={handleSliderChange} />
+        <Slider
+          slider={slider}
+          handleSliderChange={handleSliderChange}
+          value={value}
+        />
       </Col>
     );
   });
