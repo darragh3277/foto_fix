@@ -1,4 +1,4 @@
-import React, { Component, createRef } from "react";
+import React, { Component } from "react";
 import Canvas from "./components/canvas/Canvas";
 import Header from "./components/header/Header";
 import Controls from "./components/controls/Controls";
@@ -10,8 +10,6 @@ import "./App.css";
 class App extends Component {
   constructor() {
     super();
-    this.test = createRef();
-    this.canvasRef = React.createRef();
     this.filterOptions = [
       {
         id: 1,
@@ -36,8 +34,6 @@ class App extends Component {
   };
 
   componentDidUpdate = () => {
-    console.log(this.test);
-    console.log(this.canvasRef);
     if (this.state.image === null) return;
     this.canvas = new fabric.Canvas("canvas", {
       selection: false,
@@ -57,17 +53,13 @@ class App extends Component {
     });
   };
 
-  getRefDeets = () => {
-    console.log("hi", this.test, this.canvasRef);
-  };
-
   render = () => {
     let display = <Upload onChange={this.handleImageUpload} />;
     if (this.state.image !== null) {
       display = (
         <>
           <Canvas ref={this.canvasRef} />
-          <Controls filters={this.filterOptions} />
+          <Controls filters={this.filterOptions} img={this.state.image} />
         </>
       );
     }

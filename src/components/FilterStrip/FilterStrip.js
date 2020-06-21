@@ -2,11 +2,11 @@ import React from "react";
 import { Row, Col } from "reactstrap";
 import FilterPreview from "../FilterPreview/FilterPreview";
 
-export default ({ filters }) => {
+export default ({ filters, img }) => {
   let filterComponents = filters.map((filter) => {
     return (
       <Col xs={4} key={filter.id}>
-        <FilterPreview name={filter.name} />
+        <FilterPreview filter={filter} img={img} />
       </Col>
     );
   });
