@@ -33,24 +33,54 @@ class App extends Component {
     });
   };
 
+  handleClearCanvas = () => {
+    this.canvas = null;
+    this.setState({
+      filtersSelected: [],
+      image: null,
+    });
+  };
+
+  handleResetImage = () => {
+    this.setState({
+      filtersSelected: [],
+    });
+  };
+
+  handleFilterToggle = (filter) => {
+    let index = this.state.filtersSelected.indexOf(filter);
+    let filters = [...this.state.filtersSelected];
+    if (index > -1) {
+      filters.splice(index, 1);
+    } else {
+      filters.push(filter);
+    }
+    this.setState({
+      filtersSelected: filters,
+    });
+  };
+
   componentDidUpdate = () => {
-    if (this.state.image === null) return;
     this.canvas = new fabric.Canvas("canvas", {
       selection: false,
       hoverCursor: "context-menu",
       backgroundColor: "#2b2e31",
+      width: 500,
+      height: 300,
     });
-    fabric.Image.fromURL(this.state.image, (img) => {
-      img.set({ selectable: false });
-      img.scaleToWidth(300);
-      img.scaleToHeight(150);
-      for (let i = 0; i < this.state.filtersSelected.length; i++) {
-        img.filters.push(this.state.filtersSelected[i]);
-      }
-      img.applyFilters();
-      this.canvas.add(img);
-      this.canvas.centerObject(img);
-    });
+    if (this.state.image !== null) {
+      fabric.Image.fromURL(this.state.image, (img) => {
+        img.set({ selectable: false });
+        img.scaleToWidth(500);
+        img.scaleToHeight(300);
+        for (let i = 0; i < this.state.filtersSelected.length; i++) {
+          img.filters.push(this.state.filtersSelected[i].function);
+        }
+        img.applyFilters();
+        this.canvas.add(img);
+        this.canvas.centerObject(img);
+      });
+    }
   };
 
   render = () => {
@@ -59,7 +89,13 @@ class App extends Component {
       display = (
         <>
           <Canvas ref={this.canvasRef} />
-          <Controls filters={this.filterOptions} img={this.state.image} />
+          <Controls
+            filters={this.filterOptions}
+            img={this.state.image}
+            handleFilterToggle={this.handleFilterToggle}
+            handleClearCanvas={this.handleClearCanvas}
+            handleResetImage={this.handleResetImage}
+          />
         </>
       );
     }
@@ -67,7 +103,6 @@ class App extends Component {
       <Container fluid className="vh-100 bg-dark">
         <Row className="justify-content-center pt-3" onClick={this.getRefDeets}>
           <Col xs={8}>
-            <h3 ref={this.test}>teset</h3>
             <Header />
             {display}
           </Col>
