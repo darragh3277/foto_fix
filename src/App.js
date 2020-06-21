@@ -25,7 +25,7 @@ class App extends Component {
   };
 
   handleSliderChange = (slider, value) => {
-    value = value / 10;
+    // value = value / 10;
     let filters = [...this.state.selectedFilters];
     let index = filters.indexOf(slider);
     let settings = { [slider.control]: value };

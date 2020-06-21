@@ -17,7 +17,8 @@ export default ({ slider, handleSliderChange }) => {
           type="range"
           min={slider.min}
           max={slider.max}
-          defaultValue="0"
+          step={slider.step}
+          defaultValue={slider.defaultValue}
           id={slider.name + "Range"}
           name={slider.name + "Range"}
           onChange={(e) => handleSliderChange(slider, e.target.value)}
