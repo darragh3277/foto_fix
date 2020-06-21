@@ -5,7 +5,7 @@ import "./Canvas.css";
 export default () => {
   return (
     <Row className="justify-content-center">
-      <canvas className="border rounded" />
+      <canvas className="border rounded-top" id="canvas" />
     </Row>
   );
 };
