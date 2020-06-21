@@ -1,5 +1,6 @@
 import React from "react";
 import FilterStrip from "../FilterStrip/FilterStrip";
+import Sliders from "../Sliders/Sliders";
 import { Row, Button } from "reactstrap";
 
 export default ({
@@ -18,7 +19,9 @@ export default ({
           selectedFilters={selectedFilters}
         />
       </Row>
-      <Row className="justify-content-center mt-2">Sliders</Row>
+      <Row className="mt-2">
+        <Sliders />
+      </Row>
       <Row className="justify-content-center mt-2">
         <Button
           onClick={handleClearCanvas}
