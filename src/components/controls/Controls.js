@@ -3,8 +3,8 @@ import FilterStrip from "../FilterStrip/FilterStrip";
 import { Row, Button } from "reactstrap";
 
 export default ({
-  filters,
   img,
+  selectedFilters,
   handleFilterToggle,
   handleResetImage,
   handleClearCanvas,
@@ -13,11 +13,12 @@ export default ({
     <>
       <Row className="justify-content-center p-2 mt-2">
         <FilterStrip
-          filters={filters}
           img={img}
           handleFilterToggle={handleFilterToggle}
+          selectedFilters={selectedFilters}
         />
       </Row>
+      <Row className="justify-content-center mt-2">Sliders</Row>
       <Row className="justify-content-center mt-2">
         <Button
           onClick={handleClearCanvas}

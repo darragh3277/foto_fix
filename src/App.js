@@ -10,18 +10,9 @@ import "./App.css";
 class App extends Component {
   constructor() {
     super();
-    this.filterOptions = [
-      {
-        id: 1,
-        name: "Grayscale",
-        function: new fabric.Image.filters.Grayscale(),
-      },
-      { id: 2, name: "Vintage", function: new fabric.Image.filters.Vintage() },
-      { id: 3, name: "Sepia", function: new fabric.Image.filters.Sepia() },
-    ];
     this.state = {
       image: null,
-      filtersSelected: [],
+      selectedFilters: [],
     };
   }
 
@@ -36,27 +27,27 @@ class App extends Component {
   handleClearCanvas = () => {
     this.canvas = null;
     this.setState({
-      filtersSelected: [],
+      selectedFilters: [],
       image: null,
     });
   };
 
   handleResetImage = () => {
     this.setState({
-      filtersSelected: [],
+      selectedFilters: [],
     });
   };
 
   handleFilterToggle = (filter) => {
-    let index = this.state.filtersSelected.indexOf(filter);
-    let filters = [...this.state.filtersSelected];
+    let index = this.state.selectedFilters.indexOf(filter);
+    let filters = [...this.state.selectedFilters];
     if (index > -1) {
       filters.splice(index, 1);
     } else {
       filters.push(filter);
     }
     this.setState({
-      filtersSelected: filters,
+      selectedFilters: filters,
     });
   };
 
@@ -73,8 +64,8 @@ class App extends Component {
         img.set({ selectable: false });
         img.scaleToWidth(500);
         img.scaleToHeight(300);
-        for (let i = 0; i < this.state.filtersSelected.length; i++) {
-          img.filters.push(this.state.filtersSelected[i].function);
+        for (let i = 0; i < this.state.selectedFilters.length; i++) {
+          img.filters.push(this.state.selectedFilters[i].function);
         }
         img.applyFilters();
         this.canvas.add(img);
@@ -90,8 +81,8 @@ class App extends Component {
         <>
           <Canvas ref={this.canvasRef} />
           <Controls
-            filters={this.filterOptions}
             img={this.state.image}
+            selectedFilters={this.state.selectedFilters}
             handleFilterToggle={this.handleFilterToggle}
             handleClearCanvas={this.handleClearCanvas}
             handleResetImage={this.handleResetImage}
