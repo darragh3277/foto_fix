@@ -1,6 +1,5 @@
 import React from "react";
 import { Col } from "reactstrap";
-import { fabric } from "fabric";
 import Slider from "../Slider/Slider";
 import "./Sliders.css";
 
@@ -8,38 +7,38 @@ const sliders = [
   {
     id: 1,
     name: "Brightness",
-    function: new fabric.Image.filters.Brightness({
-      brightness: 0,
-    }),
+    control: "brightness",
+    min: 0,
+    max: 10,
   },
   {
     id: 2,
     name: "Contrast",
-    function: new fabric.Image.filters.Contrast({
-      contrast: 0,
-    }),
+    control: "contrast",
+    min: 0,
+    max: 10,
   },
   {
     id: 3,
     name: "Blur",
-    function: new fabric.Image.filters.Blur({
-      blur: 0,
-    }),
+    control: "blur",
+    min: 0,
+    max: 10,
   },
   {
     id: 4,
     name: "Pixelate",
-    function: new fabric.Image.filters.Pixelate({
-      blocksize: 0,
-    }),
+    control: "blocksize",
+    min: 10,
+    max: 1000,
   },
 ];
 
-export default () => {
+export default ({ handleSliderChange }) => {
   let sliderComponents = sliders.map((slider) => {
     return (
       <Col key={slider.id} xs={12} md={6}>
-        <Slider slider={slider} />
+        <Slider slider={slider} handleSliderChange={handleSliderChange} />
       </Col>
     );
   });

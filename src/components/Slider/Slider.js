@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col } from "reactstrap";
 
-export default ({ slider }) => {
+export default ({ slider, handleSliderChange }) => {
   return (
     <Row>
       <Col>
@@ -15,11 +15,12 @@ export default ({ slider }) => {
       <Col>
         <input
           type="range"
-          min="0"
-          max="10"
+          min={slider.min}
+          max={slider.max}
           defaultValue="0"
           id={slider.name + "Range"}
           name={slider.name + "Range"}
+          onChange={(e) => handleSliderChange(slider, e.target.value)}
         />
       </Col>
     </Row>

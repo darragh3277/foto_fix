@@ -9,6 +9,7 @@ export default ({
   handleFilterToggle,
   handleResetImage,
   handleClearCanvas,
+  handleSliderChange,
 }) => {
   return (
     <>
@@ -20,7 +21,7 @@ export default ({
         />
       </Row>
       <Row className="mt-2">
-        <Sliders />
+        <Sliders handleSliderChange={handleSliderChange} />
       </Row>
       <Row className="justify-content-center mt-2">
         <Button

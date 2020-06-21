@@ -24,6 +24,22 @@ class App extends Component {
     });
   };
 
+  handleSliderChange = (slider, value) => {
+    value = value / 10;
+    let filters = [...this.state.selectedFilters];
+    let index = filters.indexOf(slider);
+    let settings = { [slider.control]: value };
+    slider.function = new fabric.Image.filters[slider.name](settings);
+    if (index > -1) {
+      filters[index] = slider;
+    } else {
+      filters.push(slider);
+    }
+    this.setState({
+      selectedFilters: filters,
+    });
+  };
+
   handleClearCanvas = () => {
     this.canvas = null;
     this.setState({
@@ -86,6 +102,7 @@ class App extends Component {
             handleFilterToggle={this.handleFilterToggle}
             handleClearCanvas={this.handleClearCanvas}
             handleResetImage={this.handleResetImage}
+            handleSliderChange={this.handleSliderChange}
           />
         </>
       );
