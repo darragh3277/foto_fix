@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import Canvas from "./components/canvas/Canvas";
 import Header from "./components/header/Header";
-import Dashboard from "./components/controls/Controls";
+import Controls from "./components/controls/Controls";
 import Upload from "./components/upload/Upload";
 import { Container, Row, Col } from "reactstrap";
 import { fabric } from "fabric";
@@ -10,13 +10,19 @@ import "./App.css";
 class App extends Component {
   constructor() {
     super();
+    this.test = createRef();
+    this.canvasRef = React.createRef();
+    this.filterOptions = [
+      {
+        id: 1,
+        name: "Grayscale",
+        function: new fabric.Image.filters.Grayscale(),
+      },
+      { id: 2, name: "Vintage", function: new fabric.Image.filters.Vintage() },
+      { id: 3, name: "Sepia", function: new fabric.Image.filters.Sepia() },
+    ];
     this.state = {
       image: null,
-      filterOptions: [
-        { name: "Grayscale", function: new fabric.Image.filters.Grayscale() },
-        { name: "Vintage", function: new fabric.Image.filters.Vintage() },
-        { name: "Sepia", function: new fabric.Image.filters.Sepia() },
-      ],
       filtersSelected: [],
     };
   }
@@ -30,6 +36,8 @@ class App extends Component {
   };
 
   componentDidUpdate = () => {
+    console.log(this.test);
+    console.log(this.canvasRef);
     if (this.state.image === null) return;
     this.canvas = new fabric.Canvas("canvas", {
       selection: false,
@@ -49,20 +57,25 @@ class App extends Component {
     });
   };
 
+  getRefDeets = () => {
+    console.log("hi", this.test, this.canvasRef);
+  };
+
   render = () => {
     let display = <Upload onChange={this.handleImageUpload} />;
     if (this.state.image !== null) {
       display = (
         <>
-          <Canvas />
-          <Dashboard />
+          <Canvas ref={this.canvasRef} />
+          <Controls filters={this.filterOptions} />
         </>
       );
     }
     return (
       <Container fluid className="vh-100 bg-dark">
-        <Row className="justify-content-center pt-3">
+        <Row className="justify-content-center pt-3" onClick={this.getRefDeets}>
           <Col xs={8}>
+            <h3 ref={this.test}>teset</h3>
             <Header />
             {display}
           </Col>
