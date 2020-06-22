@@ -1,7 +1,7 @@
 import React from "react";
 import { Row, Col } from "reactstrap";
 
-export default ({ slider, handleSliderChange, value }) => {
+export default ({ slider, handleSliderChange }) => {
   return (
     <Row>
       <div className="form-group">
@@ -19,7 +19,7 @@ export default ({ slider, handleSliderChange, value }) => {
             min={slider.min}
             max={slider.max}
             step={slider.step}
-            value={value}
+            value={slider.value}
             id={slider.name + "Range"}
             name={slider.name + "Range"}
             onChange={(e) => handleSliderChange(slider, e.target.value)}

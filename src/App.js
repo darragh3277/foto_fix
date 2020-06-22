@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import Canvas from "./components/canvas/Canvas";
-import Header from "./components/header/Header";
-import Controls from "./components/controls/Controls";
-import Upload from "./components/upload/Upload";
+import Canvas from "./components/Canvas/Canvas";
+import Header from "./components/Header/Header";
+import Controls from "./components/Controls/Controls";
+import Upload from "./components/Upload/Upload";
+import { sliders } from "./filters/Filters";
 import { Container, Row, Col } from "reactstrap";
-import { fabric } from "fabric";
 import "./App.css";
 
 class App extends Component {
@@ -14,6 +14,7 @@ class App extends Component {
       canvas: null,
       image: null,
       selectedFilters: [],
+      sliders,
       sliderValues: [
         { Brightness: 0 },
         { Contrast: 0 },
@@ -40,10 +41,15 @@ class App extends Component {
 
   handleClearCanvas = () => {
     let canvas = null;
+    let sliders = [...this.state.sliders];
+    for (let i = 0; i < sliders.length; i++) {
+      sliders[i].value = sliders[i].defaultValue;
+    }
     this.setState({
       canvas,
       selectedFilters: [],
       image: null,
+      sliders,
       sliderValues: [
         { Brightness: 0 },
         { Contrast: 0 },
@@ -59,8 +65,13 @@ class App extends Component {
     canvas._objects[0].filters = [];
     canvas._objects[0].applyFilters();
     canvas.renderAll();
+    let sliders = [...this.state.sliders];
+    for (let i = 0; i < sliders.length; i++) {
+      sliders[i].value = sliders[i].defaultValue;
+    }
     this.setState({
       canvas,
+      sliders,
       selectedFilters: [],
       sliderValues: [
         { Brightness: 0 },
@@ -73,23 +84,11 @@ class App extends Component {
   };
 
   handleSliderChange = (slider, value) => {
-    let sliderValues = [...this.state.sliderValues];
-    let sliderIndex = sliderValues.findIndex(
-      (s) => s[slider.name] !== undefined
-    );
-    sliderValues[sliderIndex][slider.name] = value;
-    let filters = [...this.state.selectedFilters];
-    let index = filters.indexOf(slider);
-    let settings = { [slider.control]: value };
-    slider.function = new fabric.Image.filters[slider.name](settings);
-    if (index > -1) {
-      filters[index] = slider;
-    } else {
-      filters.push(slider);
-    }
+    let sliders = [...this.state.sliders];
+    let si = sliders.findIndex((s) => s === slider);
+    sliders[si].value = value;
     this.setState({
-      selectedFilters: filters,
-      sliderValues,
+      sliders,
     });
   };
 
@@ -115,12 +114,14 @@ class App extends Component {
             canvas={this.state.canvas}
             image={this.state.image}
             filters={this.state.selectedFilters}
+            sliders={this.state.sliders}
             handleCanvasMount={this.handleCanvasMount}
           />
           <Controls
             img={this.state.image}
             selectedFilters={this.state.selectedFilters}
             sliderValues={this.state.sliderValues}
+            sliders={this.state.sliders}
             handleFilterToggle={this.handleFilterToggle}
             handleClearCanvas={this.handleClearCanvas}
             handleResetImage={this.handleResetImage}

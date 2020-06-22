@@ -19,17 +19,10 @@ class Canvas extends Component {
     let width = this.canvasWrapperRef.current.clientWidth;
     let canvas = this.props.canvas;
     let image = this.props.canvas._objects[0];
-    let orientation = image.width >= image.height ? "landscape" : "portrait";
     this.setState({ width });
     canvas.setWidth(width);
     canvas.calcOffset();
-    image.scaleToWidth(width);
-    if (
-      orientation === "landscape" &&
-      image.getScaledHeight() >= this.state.height
-    ) {
-      image.scaleToHeight(this.state.height);
-    }
+    image = this.setScale(image);
     canvas.centerObject(image);
     canvas.renderAll();
   };
@@ -45,15 +38,8 @@ class Canvas extends Component {
       height: this.state.height,
     });
     fabric.Image.fromURL(this.props.image, (img) => {
-      let orientation = img.width >= img.height ? "landscape" : "portrait";
+      img = this.setScale(img);
       img.set({ selectable: false });
-      img.scaleToWidth(width);
-      if (
-        orientation === "landscape" &&
-        img.getScaledHeight() >= this.state.height
-      ) {
-        img.scaleToHeight(this.state.height);
-      }
       canvas.add(img);
       canvas.centerObject(img);
     });
@@ -63,13 +49,43 @@ class Canvas extends Component {
   componentDidUpdate = () => {
     let image = this.props.canvas._objects[0];
     if (image === undefined) return;
+    image = this.applyFilters(image);
+    image = this.applySliders(image);
+    image.applyFilters();
+    this.props.canvas.renderAll();
+  };
+
+  setScale = (image) => {
+    let width = this.canvasWrapperRef.current.clientWidth;
+    let orientation = image.width >= image.height ? "landscape" : "portrait";
+    image.scaleToWidth(width);
+    if (
+      orientation === "landscape" &&
+      image.getScaledHeight() >= this.state.height
+    ) {
+      image.scaleToHeight(this.state.height);
+    }
+    return image;
+  };
+
+  applyFilters = (image) => {
     let filters = this.props.filters;
     image.filters = [];
     for (let i = 0; i < filters.length; i++) {
       image.filters.push(filters[i].function);
     }
-    image.applyFilters();
-    this.props.canvas.renderAll();
+    return image;
+  };
+
+  applySliders = (image) => {
+    let sliders = this.props.sliders;
+    for (let i = 0; i < sliders.length; i++) {
+      let slider = sliders[i];
+      let settings = { [slider.control]: slider.value };
+      let sliderFunction = new fabric.Image.filters[slider.name](settings);
+      image.filters.push(sliderFunction);
+    }
+    return image;
   };
 
   render = () => {

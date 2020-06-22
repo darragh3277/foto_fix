@@ -11,6 +11,7 @@ export default ({
   handleResetImage,
   handleClearCanvas,
   handleSliderChange,
+  sliders,
 }) => {
   return (
     <>
@@ -23,6 +24,7 @@ export default ({
         <Sliders
           handleSliderChange={handleSliderChange}
           sliderValues={sliderValues}
+          sliders={sliders}
         />
       </Row>
       <Row className="justify-content-center mt-2">

@@ -1,5 +1,4 @@
 import React from "react";
-import { fabric } from "fabric";
 import FilterPreview from "../FilterPreview/FilterPreview";
 import { filterOptions } from "../../filters/Filters";
 import { Row } from "reactstrap";
