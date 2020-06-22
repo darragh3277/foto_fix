@@ -1,18 +1,9 @@
 import React from "react";
 import { fabric } from "fabric";
 import FilterPreview from "../FilterPreview/FilterPreview";
-import "./FilterStrip.css";
+import { filterOptions } from "../../filters/Filters";
 import { Row } from "reactstrap";
-
-const filterOptions = [
-  {
-    id: 1,
-    name: "Grayscale",
-    function: new fabric.Image.filters.Grayscale(),
-  },
-  { id: 2, name: "Vintage", function: new fabric.Image.filters.Vintage() },
-  { id: 3, name: "Sepia", function: new fabric.Image.filters.Sepia() },
-];
+import "./FilterStrip.css";
 
 export default ({ img, selectedFilters, handleFilterToggle }) => {
   const slides = filterOptions.map((filter, i) => {
