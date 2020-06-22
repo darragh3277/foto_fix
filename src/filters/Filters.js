@@ -18,12 +18,31 @@ export const filters = [
     function: new fabric.Image.filters.Sepia(),
     enabled: false,
   },
+  {
+    id: 4,
+    name: "Polaroid",
+    function: new fabric.Image.filters.Polaroid(),
+    enabled: false,
+  },
+  {
+    id: 5,
+    name: "Black & White",
+    function: new fabric.Image.filters.BlackWhite(),
+    enabled: false,
+  },
+  {
+    id: 6,
+    name: "Kodachrome",
+    function: new fabric.Image.filters.Kodachrome(),
+    enabled: false,
+  },
 ];
 
 export const sliders = [
   {
     id: 1,
     name: "Brightness",
+    functionName: "Brightness",
     control: "brightness",
     min: -1,
     max: 1,
@@ -34,6 +53,7 @@ export const sliders = [
   {
     id: 2,
     name: "Contrast",
+    functionName: "Contrast",
     control: "contrast",
     min: -1,
     max: 1,
@@ -44,6 +64,7 @@ export const sliders = [
   {
     id: 3,
     name: "Blur",
+    functionName: "Blur",
     control: "blur",
     min: 0,
     max: 1,
@@ -54,6 +75,7 @@ export const sliders = [
   {
     id: 4,
     name: "Saturation",
+    functionName: "Saturation",
     control: "saturation",
     min: -1,
     max: 1,
@@ -64,11 +86,23 @@ export const sliders = [
   {
     id: 5,
     name: "Pixelate",
+    functionName: "Pixelate",
     control: "blocksize",
     min: 2,
     max: 20,
     step: 1,
     defaultValue: 2,
     value: 2,
+  },
+  {
+    id: 6,
+    name: "Hue",
+    functionName: "HueRotation",
+    control: "rotation",
+    min: -2,
+    max: 2,
+    step: 0.002,
+    defaultValue: 0,
+    value: 0,
   },
 ];

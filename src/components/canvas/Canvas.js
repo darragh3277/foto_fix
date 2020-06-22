@@ -83,7 +83,9 @@ class Canvas extends Component {
     for (let i = 0; i < sliders.length; i++) {
       let slider = sliders[i];
       let settings = { [slider.control]: slider.value };
-      let sliderFunction = new fabric.Image.filters[slider.name](settings);
+      let sliderFunction = new fabric.Image.filters[slider.functionName](
+        settings
+      );
       image.filters.push(sliderFunction);
     }
     return image;
