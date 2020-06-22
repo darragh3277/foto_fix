@@ -1,0 +1,6 @@
+html,
+body,
+#root,
+.container-fluid {
+  height: 100%;
+}

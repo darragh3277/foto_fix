@@ -13,6 +13,7 @@ class Canvas extends Component {
   }
 
   updateDimensions = () => {
+    if (this.canvasWrapperRef === undefined) return;
     let width = this.canvasWrapperRef.current.clientWidth;
     let canvas = this.props.canvas;
     let image = this.props.canvas._objects[0];
@@ -21,7 +22,10 @@ class Canvas extends Component {
     canvas.setWidth(width);
     canvas.calcOffset();
     image.scaleToWidth(width);
-    if (orientation === "landscape" && image.getScaledHeight() >= 300) {
+    if (
+      orientation === "landscape" &&
+      image.getScaledHeight() >= this.state.height
+    ) {
       image.scaleToHeight(this.state.height);
     }
     canvas.centerObject(image);
@@ -30,17 +34,26 @@ class Canvas extends Component {
 
   componentDidMount = () => {
     window.addEventListener("resize", this.updateDimensions);
+    let width = this.canvasWrapperRef.current.clientWidth;
     let canvas = new fabric.Canvas("canvas", {
       selection: false,
       hoverCursor: "context-menu",
       backgroundColor: "#2b2e31",
-      width: this.canvasWrapperRef.current.clientWidth,
+      width,
       height: this.state.height,
     });
     fabric.Image.fromURL(this.props.image, (img) => {
+      let orientation = img.width >= img.height ? "landscape" : "portrait";
       img.set({ selectable: false });
-      img.scaleToWidth(this.state.width);
-      img.scaleToHeight(this.state.height);
+      // img.scaleToWidth(this.state.width);
+      // img.scaleToHeight(this.state.height);
+      img.scaleToWidth(width);
+      if (
+        orientation === "landscape" &&
+        img.getScaledHeight() >= this.state.height
+      ) {
+        img.scaleToHeight(this.state.height);
+      }
       canvas.add(img);
       canvas.centerObject(img);
     });

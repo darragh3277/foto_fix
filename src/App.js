@@ -130,8 +130,11 @@ class App extends Component {
       );
     }
     return (
-      <Container fluid className="vh-100 bg-dark">
-        <Row className="justify-content-center pt-3" onClick={this.getRefDeets}>
+      <Container fluid className="bg-dark">
+        <Row
+          className="justify-content-center bg-dark py-3"
+          onClick={this.getRefDeets}
+        >
           <Col xs={8}>
             <Header />
             {display}
