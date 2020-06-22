@@ -31,6 +31,39 @@ class App extends Component {
     });
   };
 
+  handleClearCanvas = () => {
+    this.canvas = null;
+    this.setState({
+      selectedFilters: [],
+      image: null,
+      sliderValues: [
+        { Brightness: 0 },
+        { Contrast: 0 },
+        { Blur: 0 },
+        { Saturation: 0 },
+        { Pixelate: 2 },
+      ],
+    });
+  };
+
+  handleResetImage = () => {
+    this.canvas._objects[0].filters = [];
+    this.canvas._objects[0].applyFilters();
+    this.canvas.renderAll();
+    this.setState({
+      selectedFilters: [],
+      sliderValues: [
+        { Brightness: 0 },
+        { Contrast: 0 },
+        { Blur: 0 },
+        { Saturation: 0 },
+        { Pixelate: 2 },
+      ],
+    });
+  };
+
+  //TODO
+  //fix to match filter toggle
   handleSliderChange = (slider, value) => {
     let sliderValues = [...this.state.sliderValues];
     let sliderIndex = sliderValues.findIndex(
@@ -49,34 +82,6 @@ class App extends Component {
     this.setState({
       selectedFilters: filters,
       sliderValues,
-    });
-  };
-
-  handleClearCanvas = () => {
-    this.canvas = null;
-    this.setState({
-      selectedFilters: [],
-      image: null,
-      sliderValues: [
-        { Brightness: 0 },
-        { Contrast: 0 },
-        { Blur: 0 },
-        { Saturation: 0 },
-        { Pixelate: 2 },
-      ],
-    });
-  };
-
-  handleResetImage = () => {
-    this.setState({
-      selectedFilters: [],
-      sliderValues: [
-        { Brightness: 0 },
-        { Contrast: 0 },
-        { Blur: 0 },
-        { Saturation: 0 },
-        { Pixelate: 2 },
-      ],
     });
   };
 
