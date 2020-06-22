@@ -9,6 +9,7 @@ export default ({
   handleResetImage,
   handleClearCanvas,
   handleSliderChange,
+  handleSave,
   filters,
   sliders,
 }) => {
@@ -24,13 +25,13 @@ export default ({
       </Row>
       <Row className="justify-content-center mt-2">
         <Button
-          onClick={handleClearCanvas}
+          onClick={handleSave}
           outline
-          color="danger"
+          color="light"
           size="sm"
           className="m-1"
         >
-          New Image
+          Save
         </Button>
         <Button
           onClick={handleResetImage}
@@ -40,6 +41,15 @@ export default ({
           className="m-1"
         >
           Reset
+        </Button>
+        <Button
+          onClick={handleClearCanvas}
+          outline
+          color="danger"
+          size="sm"
+          className="m-1"
+        >
+          New Image
         </Button>
       </Row>
     </>

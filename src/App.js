@@ -73,6 +73,19 @@ class App extends Component {
     });
   };
 
+  handleSave = () => {
+    let image = this.state.canvas._objects[0];
+    let url = this.state.canvas.toDataURL({
+      top: image.top,
+      left: image.left,
+      width: image.width * image.scaleX,
+    });
+    let element = document.createElement("a");
+    element.href = url;
+    element.download = "image.png";
+    element.click();
+  };
+
   handleSliderChange = (slider, value) => {
     let sliders = [...this.state.sliders];
     let index = sliders.findIndex((s) => s === slider);
@@ -112,6 +125,7 @@ class App extends Component {
             handleClearCanvas={this.handleClearCanvas}
             handleResetImage={this.handleResetImage}
             handleSliderChange={this.handleSliderChange}
+            handleSave={this.handleSave}
           />
         </>
       );
