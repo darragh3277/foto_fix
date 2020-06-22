@@ -1,8 +1,12 @@
-import React, { Component } from "react";
+import React, { Component, createRef } from "react";
 import { fabric } from "fabric";
 import "./FilterPreview.css";
 
 class FilterPreview extends Component {
+  constructor() {
+    super();
+    this.canvasWrapperRef = createRef();
+  }
   componentDidMount = () => {
     let canvas = new fabric.Canvas("canvas_" + this.props.filter.name, {
       selection: false,
@@ -11,8 +15,8 @@ class FilterPreview extends Component {
     });
     fabric.Image.fromURL(this.props.img, (img) => {
       img.set({ selectable: false });
-      img.scaleToWidth(300);
-      img.scaleToHeight(150);
+      img.scaleToWidth(this.canvasWrapperRef.current.clientWidth);
+      img.scaleToHeight(this.canvasWrapperRef.current.clientHeight);
       img.filters.push(this.props.filter.function);
       img.applyFilters();
       canvas.add(img);
@@ -26,6 +30,7 @@ class FilterPreview extends Component {
       selected = "row justify-content-center text-primary";
     return (
       <div
+        ref={this.canvasWrapperRef}
         onClick={() => this.props.handleFilterToggle(this.props.filter)}
         className={selected}
       >
