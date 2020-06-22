@@ -14,13 +14,11 @@ export default ({
 }) => {
   return (
     <>
-      <Row className="justify-content-center p-2 mt-2">
-        <FilterStrip
-          img={img}
-          handleFilterToggle={handleFilterToggle}
-          selectedFilters={selectedFilters}
-        />
-      </Row>
+      <FilterStrip
+        img={img}
+        handleFilterToggle={handleFilterToggle}
+        selectedFilters={selectedFilters}
+      />
       <Row className="mt-2">
         <Sliders
           handleSliderChange={handleSliderChange}
@@ -33,7 +31,7 @@ export default ({
           outline
           color="danger"
           size="sm"
-          className="mr-1"
+          className="m-1"
         >
           New Image
         </Button>
@@ -42,7 +40,7 @@ export default ({
           outline
           color="light"
           size="sm"
-          className="ml-1"
+          className="m-1"
         >
           Reset
         </Button>
