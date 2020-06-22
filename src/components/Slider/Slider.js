@@ -5,7 +5,7 @@ export default ({ slider, handleSliderChange, value }) => {
   return (
     <Row>
       <div className="form-group">
-        <Col xs={12} sm={6}>
+        <Col xs={12} sm={6} md={4}>
           <label
             htmlFor={slider.name + "Range"}
             className="text-light slider mr-1"
@@ -13,7 +13,7 @@ export default ({ slider, handleSliderChange, value }) => {
             {slider.name}:
           </label>
         </Col>
-        <Col xs={12} sm={6}>
+        <Col xs={12} sm={6} md={4}>
           <input
             type="range"
             min={slider.min}

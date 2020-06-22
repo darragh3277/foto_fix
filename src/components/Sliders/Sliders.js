@@ -56,7 +56,7 @@ export default ({ handleSliderChange, sliderValues }) => {
     let index = sliderValues.findIndex((s) => s[slider.name] !== undefined);
     let value = sliderValues[index][slider.name];
     return (
-      <Col key={slider.id} xs={12} md={6}>
+      <Col key={slider.id} xs={12} sm={6} md={4} lg={3}>
         <Slider
           slider={slider}
           handleSliderChange={handleSliderChange}

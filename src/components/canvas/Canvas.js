@@ -13,7 +13,9 @@ class Canvas extends Component {
   }
 
   updateDimensions = () => {
-    if (this.canvasWrapperRef === undefined) return;
+    if (this.canvasWrapperRef === undefined || this.canvasWrapperRef === null) {
+      return;
+    }
     let width = this.canvasWrapperRef.current.clientWidth;
     let canvas = this.props.canvas;
     let image = this.props.canvas._objects[0];
@@ -45,8 +47,6 @@ class Canvas extends Component {
     fabric.Image.fromURL(this.props.image, (img) => {
       let orientation = img.width >= img.height ? "landscape" : "portrait";
       img.set({ selectable: false });
-      // img.scaleToWidth(this.state.width);
-      // img.scaleToHeight(this.state.height);
       img.scaleToWidth(width);
       if (
         orientation === "landscape" &&
