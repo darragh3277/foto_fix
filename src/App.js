@@ -83,17 +83,24 @@ class App extends Component {
   handleFilterToggle = (filter) => {
     let index = this.state.selectedFilters.indexOf(filter);
     let filters = [...this.state.selectedFilters];
-    if (index > -1) {
-      filters.splice(index, 1);
-    } else {
+    let img = this.canvas._objects[0];
+    let fliterIndex = img.filters.findIndex((f) => f === filter.function);
+    if (fliterIndex === -1) {
+      img.filters.push(filter.function);
       filters.push(filter);
+    } else {
+      img.filters.splice(fliterIndex, 1);
+      filters.splice(index, 1);
     }
     this.setState({
       selectedFilters: filters,
     });
+    img.applyFilters();
+    this.canvas.renderAll();
   };
 
   componentDidUpdate = () => {
+    if (this.canvas !== undefined) return;
     this.canvas = new fabric.Canvas("canvas", {
       selection: false,
       hoverCursor: "context-menu",
@@ -101,15 +108,16 @@ class App extends Component {
       width: 500,
       height: 300,
     });
+
     if (this.state.image !== null) {
       fabric.Image.fromURL(this.state.image, (img) => {
         img.set({ selectable: false });
         img.scaleToWidth(500);
         img.scaleToHeight(300);
-        for (let i = 0; i < this.state.selectedFilters.length; i++) {
-          img.filters.push(this.state.selectedFilters[i].function);
-        }
-        img.applyFilters();
+        // for (let i = 0; i < this.state.selectedFilters.length; i++) {
+        //   img.filters.push(this.state.selectedFilters[i].function);
+        // }
+        // img.applyFilters();
         this.canvas.add(img);
         this.canvas.centerObject(img);
       });
@@ -121,7 +129,7 @@ class App extends Component {
     if (this.state.image !== null) {
       display = (
         <>
-          <Canvas ref={this.canvasRef} />
+          <Canvas />
           <Controls
             img={this.state.image}
             selectedFilters={this.state.selectedFilters}
