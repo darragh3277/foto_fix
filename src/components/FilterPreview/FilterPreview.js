@@ -32,8 +32,7 @@ class FilterPreview extends Component {
 
   render = () => {
     let selected = "col-xs-12 text-light";
-    if (this.props.selectedFilters.includes(this.props.filter))
-      selected = "col-xs-12 text-primary";
+    if (this.props.filter.enabled) selected = "col-xs-12 text-primary";
     return (
       <div
         ref={this.canvasWrapperRef}

@@ -3,7 +3,7 @@ import Canvas from "./components/Canvas/Canvas";
 import Header from "./components/Header/Header";
 import Controls from "./components/Controls/Controls";
 import Upload from "./components/Upload/Upload";
-import { sliders } from "./filters/Filters";
+import { sliders, filters } from "./filters/Filters";
 import { Container, Row, Col } from "reactstrap";
 import "./App.css";
 
@@ -14,14 +14,8 @@ class App extends Component {
       canvas: null,
       image: null,
       selectedFilters: [],
+      filters,
       sliders,
-      sliderValues: [
-        { Brightness: 0 },
-        { Contrast: 0 },
-        { Blur: 0 },
-        { Saturation: 0 },
-        { Pixelate: 2 },
-      ],
     };
   }
 
@@ -45,18 +39,16 @@ class App extends Component {
     for (let i = 0; i < sliders.length; i++) {
       sliders[i].value = sliders[i].defaultValue;
     }
+    let filters = [...this.state.filters];
+    for (let i = 0; i < filters.length; i++) {
+      filters[i].enabled = false;
+    }
     this.setState({
       canvas,
       selectedFilters: [],
       image: null,
+      filters,
       sliders,
-      sliderValues: [
-        { Brightness: 0 },
-        { Contrast: 0 },
-        { Blur: 0 },
-        { Saturation: 0 },
-        { Pixelate: 2 },
-      ],
     });
   };
 
@@ -69,39 +61,33 @@ class App extends Component {
     for (let i = 0; i < sliders.length; i++) {
       sliders[i].value = sliders[i].defaultValue;
     }
+    let filters = [...this.state.filters];
+    for (let i = 0; i < filters.length; i++) {
+      filters[i].enabled = false;
+    }
     this.setState({
       canvas,
       sliders,
       selectedFilters: [],
-      sliderValues: [
-        { Brightness: 0 },
-        { Contrast: 0 },
-        { Blur: 0 },
-        { Saturation: 0 },
-        { Pixelate: 2 },
-      ],
+      filters,
     });
   };
 
   handleSliderChange = (slider, value) => {
     let sliders = [...this.state.sliders];
-    let si = sliders.findIndex((s) => s === slider);
-    sliders[si].value = value;
+    let index = sliders.findIndex((s) => s === slider);
+    sliders[index].value = value;
     this.setState({
       sliders,
     });
   };
 
   handleFilterToggle = (filter) => {
-    let index = this.state.selectedFilters.indexOf(filter);
-    let filters = [...this.state.selectedFilters];
-    if (index === -1) {
-      filters.push(filter);
-    } else {
-      filters.splice(index, 1);
-    }
+    let filters = [...this.state.filters];
+    let index = filters.findIndex((f) => f === filter);
+    filters[index].enabled = !filters[index].enabled;
     this.setState({
-      selectedFilters: filters,
+      filters,
     });
   };
 
@@ -113,15 +99,15 @@ class App extends Component {
           <Canvas
             canvas={this.state.canvas}
             image={this.state.image}
-            filters={this.state.selectedFilters}
+            selectedFilters={this.state.selectedFilters}
+            filters={this.state.filters}
             sliders={this.state.sliders}
             handleCanvasMount={this.handleCanvasMount}
           />
           <Controls
             img={this.state.image}
-            selectedFilters={this.state.selectedFilters}
-            sliderValues={this.state.sliderValues}
             sliders={this.state.sliders}
+            filters={this.state.filters}
             handleFilterToggle={this.handleFilterToggle}
             handleClearCanvas={this.handleClearCanvas}
             handleResetImage={this.handleResetImage}

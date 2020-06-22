@@ -1,18 +1,17 @@
 import React from "react";
 import FilterPreview from "../FilterPreview/FilterPreview";
-import { filterOptions } from "../../filters/Filters";
 import { Row } from "reactstrap";
 import "./FilterStrip.css";
 
-export default ({ img, selectedFilters, handleFilterToggle }) => {
-  const slides = filterOptions.map((filter, i) => {
+export default ({ img, filters, handleFilterToggle }) => {
+  const slides = filters.map((filter, i) => {
     return (
       <FilterPreview
         key={i}
         filter={filter}
         img={img}
         handleFilterToggle={handleFilterToggle}
-        selectedFilters={selectedFilters}
+        filters={filters}
       />
     );
   });

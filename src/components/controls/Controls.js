@@ -5,12 +5,11 @@ import { Row, Button } from "reactstrap";
 
 export default ({
   img,
-  selectedFilters,
-  sliderValues,
   handleFilterToggle,
   handleResetImage,
   handleClearCanvas,
   handleSliderChange,
+  filters,
   sliders,
 }) => {
   return (
@@ -18,14 +17,10 @@ export default ({
       <FilterStrip
         img={img}
         handleFilterToggle={handleFilterToggle}
-        selectedFilters={selectedFilters}
+        filters={filters}
       />
       <Row className="mt-2">
-        <Sliders
-          handleSliderChange={handleSliderChange}
-          sliderValues={sliderValues}
-          sliders={sliders}
-        />
+        <Sliders handleSliderChange={handleSliderChange} sliders={sliders} />
       </Row>
       <Row className="justify-content-center mt-2">
         <Button

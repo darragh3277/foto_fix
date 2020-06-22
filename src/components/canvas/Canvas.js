@@ -72,6 +72,7 @@ class Canvas extends Component {
     let filters = this.props.filters;
     image.filters = [];
     for (let i = 0; i < filters.length; i++) {
+      if (filters[i].enabled === false) continue;
       image.filters.push(filters[i].function);
     }
     return image;
