@@ -11,6 +11,7 @@ class App extends Component {
   constructor() {
     super();
     this.state = {
+      canvas: null,
       image: null,
       selectedFilters: [],
       sliderValues: [
@@ -23,6 +24,12 @@ class App extends Component {
     };
   }
 
+  handleCanvasMount = (canvas) => {
+    this.setState({
+      canvas,
+    });
+  };
+
   handleImageUpload = (e) => {
     if (e.target.files.length < 1) return;
     let url = URL.createObjectURL(e.target.files[0]);
@@ -32,8 +39,9 @@ class App extends Component {
   };
 
   handleClearCanvas = () => {
-    this.canvas = null;
+    let canvas = null;
     this.setState({
+      canvas,
       selectedFilters: [],
       image: null,
       sliderValues: [
@@ -47,10 +55,12 @@ class App extends Component {
   };
 
   handleResetImage = () => {
-    this.canvas._objects[0].filters = [];
-    this.canvas._objects[0].applyFilters();
-    this.canvas.renderAll();
+    let canvas = this.state.canvas;
+    canvas._objects[0].filters = [];
+    canvas._objects[0].applyFilters();
+    canvas.renderAll();
     this.setState({
+      canvas,
       selectedFilters: [],
       sliderValues: [
         { Brightness: 0 },
@@ -62,8 +72,6 @@ class App extends Component {
     });
   };
 
-  //TODO
-  //fix to match filter toggle
   handleSliderChange = (slider, value) => {
     let sliderValues = [...this.state.sliderValues];
     let sliderIndex = sliderValues.findIndex(
@@ -88,45 +96,14 @@ class App extends Component {
   handleFilterToggle = (filter) => {
     let index = this.state.selectedFilters.indexOf(filter);
     let filters = [...this.state.selectedFilters];
-    let img = this.canvas._objects[0];
-    let fliterIndex = img.filters.findIndex((f) => f === filter.function);
-    if (fliterIndex === -1) {
-      img.filters.push(filter.function);
+    if (index === -1) {
       filters.push(filter);
     } else {
-      img.filters.splice(fliterIndex, 1);
       filters.splice(index, 1);
     }
     this.setState({
       selectedFilters: filters,
     });
-    img.applyFilters();
-    this.canvas.renderAll();
-  };
-
-  componentDidUpdate = () => {
-    if (this.canvas !== undefined) return;
-    this.canvas = new fabric.Canvas("canvas", {
-      selection: false,
-      hoverCursor: "context-menu",
-      backgroundColor: "#2b2e31",
-      width: 500,
-      height: 300,
-    });
-
-    if (this.state.image !== null) {
-      fabric.Image.fromURL(this.state.image, (img) => {
-        img.set({ selectable: false });
-        img.scaleToWidth(500);
-        img.scaleToHeight(300);
-        // for (let i = 0; i < this.state.selectedFilters.length; i++) {
-        //   img.filters.push(this.state.selectedFilters[i].function);
-        // }
-        // img.applyFilters();
-        this.canvas.add(img);
-        this.canvas.centerObject(img);
-      });
-    }
   };
 
   render = () => {
@@ -134,7 +111,12 @@ class App extends Component {
     if (this.state.image !== null) {
       display = (
         <>
-          <Canvas />
+          <Canvas
+            canvas={this.state.canvas}
+            image={this.state.image}
+            filters={this.state.selectedFilters}
+            handleCanvasMount={this.handleCanvasMount}
+          />
           <Controls
             img={this.state.image}
             selectedFilters={this.state.selectedFilters}
