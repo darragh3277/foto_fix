@@ -4,21 +4,23 @@ import Sliders from "../Sliders/Sliders";
 import { Row, Button } from "reactstrap";
 
 export default ({
-  img,
+  image,
   handleFilterToggle,
   handleResetImage,
   handleClearCanvas,
   handleSliderChange,
   handleSave,
+  selectedIndex,
   filters,
   sliders,
 }) => {
   return (
     <>
       <FilterStrip
-        img={img}
+        image={image}
         handleFilterToggle={handleFilterToggle}
         filters={filters}
+        selectedIndex={selectedIndex}
       />
       <Row className="mt-2">
         <Sliders handleSliderChange={handleSliderChange} sliders={sliders} />

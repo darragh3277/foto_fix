@@ -3,7 +3,7 @@ import { Row, Col } from "reactstrap";
 
 export default ({ slider, handleSliderChange }) => {
   return (
-    <Row>
+    <Row className="justify-content-center justify-content-sm-start">
       <div className="form-group">
         <Col xs={12} sm={6} md={4}>
           <label

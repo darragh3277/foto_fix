@@ -1,6 +1,5 @@
 import React, { Component, createRef } from "react";
 import { fabric } from "fabric";
-import "./Canvas.css";
 
 class Canvas extends Component {
   constructor() {
@@ -23,25 +22,25 @@ class Canvas extends Component {
     let canvas = this.props.canvas;
     let image = this.props.canvas._objects[0];
     this.setState({ width });
-    canvas.setWidth(width);
     canvas.calcOffset();
     image = this.setScale(image);
+    canvas.setWidth(image.getScaledWidth());
     canvas.centerObject(image);
     canvas.renderAll();
   };
 
   componentDidMount = () => {
     window.addEventListener("resize", this.updateDimensions);
-    let width = this.canvasWrapperRef.current.clientWidth;
     let canvas = new fabric.Canvas("canvas", {
       selection: false,
       hoverCursor: "context-menu",
       backgroundColor: "#2b2e31",
-      width,
       height: this.state.height,
     });
     fabric.Image.fromURL(this.props.image, (img) => {
       img = this.setScale(img);
+      canvas.setWidth(img.getScaledWidth());
+      canvas.setHeight(img.getScaledHeight());
       img.set({ selectable: false });
       canvas.add(img);
       canvas.centerObject(img);
@@ -54,6 +53,9 @@ class Canvas extends Component {
     if (image === undefined) return;
     image = this.applyFilters(image);
     image = this.applySliders(image);
+    this.props.canvas.setWidth(image.getScaledWidth());
+    this.props.canvas.setHeight(image.getScaledHeight());
+    this.props.canvas.centerObject(image);
     image.applyFilters();
     this.props.canvas.renderAll();
   };
@@ -93,7 +95,7 @@ class Canvas extends Component {
   render = () => {
     return (
       <div ref={this.canvasWrapperRef} className="row justify-content-center">
-        <canvas className="border rounded" id="canvas" />
+        <canvas id="canvas" />
       </div>
     );
   };

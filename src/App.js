@@ -10,12 +10,14 @@ import "./App.css";
 class App extends Component {
   constructor() {
     super();
+    this.selectedIndex = null;
     this.state = {
       canvas: null,
       image: null,
       selectedFilters: [],
       filters,
       sliders,
+      fileSizeWarning: false,
     };
   }
 
@@ -27,6 +29,12 @@ class App extends Component {
 
   handleImageUpload = (e) => {
     if (e.target.files.length < 1) return;
+    if (e.target.files[0].size > 500000) {
+      this.setState({
+        fileSizeWarning: true,
+      });
+      return;
+    }
     let url = URL.createObjectURL(e.target.files[0]);
     this.setState({
       image: url,
@@ -49,6 +57,7 @@ class App extends Component {
       image: null,
       filters,
       sliders,
+      fileSizeWarning: false,
     });
   };
 
@@ -70,6 +79,7 @@ class App extends Component {
       sliders,
       selectedFilters: [],
       filters,
+      fileSizeWarning: false,
     });
   };
 
@@ -95,8 +105,8 @@ class App extends Component {
     });
   };
 
-  handleFilterToggle = (e, filter) => {
-    e.preventDefault();
+  handleFilterToggle = (filter, selectedIndex) => {
+    this.selectedIndex = selectedIndex;
     let filters = [...this.state.filters];
     let index = filters.findIndex((f) => f === filter);
     filters[index].enabled = !filters[index].enabled;
@@ -106,7 +116,12 @@ class App extends Component {
   };
 
   render = () => {
-    let display = <Upload onChange={this.handleImageUpload} />;
+    let display = (
+      <Upload
+        onChange={this.handleImageUpload}
+        fileSizeWarning={this.state.fileSizeWarning}
+      />
+    );
     if (this.state.image !== null) {
       display = (
         <>
@@ -119,7 +134,7 @@ class App extends Component {
             handleCanvasMount={this.handleCanvasMount}
           />
           <Controls
-            img={this.state.image}
+            image={this.state.image}
             sliders={this.state.sliders}
             filters={this.state.filters}
             handleFilterToggle={this.handleFilterToggle}
@@ -127,6 +142,7 @@ class App extends Component {
             handleResetImage={this.handleResetImage}
             handleSliderChange={this.handleSliderChange}
             handleSave={this.handleSave}
+            selectedIndex={this.selectedIndex}
           />
         </>
       );
@@ -137,7 +153,7 @@ class App extends Component {
           className="justify-content-center bg-dark py-3"
           onClick={this.getRefDeets}
         >
-          <Col xs={8}>
+          <Col xs={12} sm={10} md={8}>
             <Header />
             {display}
           </Col>
