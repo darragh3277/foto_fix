@@ -16,18 +16,23 @@ class FilterPreview extends Component {
     });
     fabric.Image.fromURL(this.props.img, (img) => {
       img.set({ selectable: false });
-      if (
-        this.canvasWrapperRef !== null &&
-        this.canvasWrapperRef !== undefined
-      ) {
-        img.scaleToWidth(this.canvasWrapperRef.current.clientWidth);
-        img.scaleToHeight(this.canvasWrapperRef.current.clientHeight);
-      }
+      img = this.setScale(img);
       img.filters.push(this.props.filter.function);
       img.applyFilters();
       canvas.add(img);
       canvas.centerObject(img);
     });
+  };
+
+  setScale = (image) => {
+    let width = this.canvasWrapperRef.current.clientWidth;
+    let height = this.canvasWrapperRef.current.clientHeight;
+    if (image.height > image.width) {
+      image.scaleToHeight(height);
+    } else {
+      image.scaleToWidth(width);
+    }
+    return image;
   };
 
   render = () => {
@@ -36,11 +41,11 @@ class FilterPreview extends Component {
     return (
       <div
         ref={this.canvasWrapperRef}
-        onClick={() => this.props.handleFilterToggle(this.props.filter)}
+        onClick={(e) => this.props.handleFilterToggle(e, this.props.filter)}
         className={selected}
       >
         <div className={"row justify-content-center"}>
-          <div className="col-12 mx-1">
+          <div className="col-12 m-1">
             <canvas
               className="border rounded col-12 p-0"
               height="100%"

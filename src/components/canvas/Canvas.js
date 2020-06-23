@@ -13,7 +13,10 @@ class Canvas extends Component {
   }
 
   updateDimensions = () => {
-    if (this.canvasWrapperRef === undefined || this.canvasWrapperRef === null) {
+    if (
+      this.canvasWrapperRef.current === undefined ||
+      this.canvasWrapperRef.current === null
+    ) {
       return;
     }
     let width = this.canvasWrapperRef.current.clientWidth;
@@ -57,13 +60,9 @@ class Canvas extends Component {
 
   setScale = (image) => {
     let width = this.canvasWrapperRef.current.clientWidth;
-    let orientation = image.width >= image.height ? "landscape" : "portrait";
-    image.scaleToWidth(width);
-    if (
-      orientation === "landscape" &&
-      image.getScaledHeight() >= this.state.height
-    ) {
-      image.scaleToHeight(this.state.height);
+    image.scaleToHeight(this.state.height);
+    if (image.getScaledWidth() >= width) {
+      image.scaleToWidth(width);
     }
     return image;
   };

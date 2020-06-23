@@ -1,5 +1,6 @@
 {
-  "name": "filterr",
+  "name": "fotofix",
+  "homepage": "https://darraghobrien.com/projects/fotofix",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

@@ -95,7 +95,8 @@ class App extends Component {
     });
   };
 
-  handleFilterToggle = (filter) => {
+  handleFilterToggle = (e, filter) => {
+    e.preventDefault();
     let filters = [...this.state.filters];
     let index = filters.findIndex((f) => f === filter);
     filters[index].enabled = !filters[index].enabled;
