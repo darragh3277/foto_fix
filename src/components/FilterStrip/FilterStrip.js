@@ -19,12 +19,17 @@ const fliterPreviews = (filters, img, handleFilterToggle) => {
         filter={filter}
         handleFilterToggle={handleFilterToggle}
         img={img}
+        selectedIndex={i}
       />
     );
   });
 };
 
-export default ({ img, filters, handleFilterToggle }) => {
+export default ({ img, filters, handleFilterToggle, selectedIndex }) => {
+  if (selectedIndex === null) {
+    selectedIndex = filters.length / 2;
+  }
+  flickityOptions.initialIndex = selectedIndex;
   return (
     <Row>
       <Col className="mt-5">

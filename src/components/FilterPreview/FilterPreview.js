@@ -15,7 +15,6 @@ class FilterPreview extends Component {
       height: 100,
     });
     fabric.Image.fromURL(this.props.img, (img) => {
-      console.log("image", img);
       img.set({ selectable: false });
       img.scaleToHeight(100);
       img.scaleToHeight(100);
@@ -25,21 +24,37 @@ class FilterPreview extends Component {
       this.canvas.centerObject(img);
       this.canvas.renderAll();
     });
-    console.log("canvas", this.canvas);
   };
 
   render = () => {
     return (
-      <span
-        className={this.props.filter.enabled ? "bg-primary" : null}
-        onClick={(e) => this.props.handleFilterToggle(e, this.props.filter)}
-      >
+      <span className={this.props.filter.enabled ? "bg-primary" : null}>
+        {/* Messy work with click and mouse events. This hack works for now */}
+        <span
+          width="100px"
+          height="100px"
+          className="clicker"
+          onClick={() => {
+            this.props.handleFilterToggle(
+              this.props.filter,
+              this.props.selectedIndex
+            );
+          }}
+        ></span>
         <canvas
           width="100px"
           height="100px"
           id={"canvas_" + this.props.filter.name}
         ></canvas>
-        <p className="text-light text-center label my-1">
+        <p
+          className="text-light text-center label my-1"
+          onClick={(e) => {
+            this.props.handleFilterToggle(
+              this.props.filter,
+              this.props.selectedIndex
+            );
+          }}
+        >
           {this.props.filter.name}
         </p>
       </span>

@@ -36,11 +36,12 @@ class Canvas extends Component {
       selection: false,
       hoverCursor: "context-menu",
       backgroundColor: "#2b2e31",
-      width,
       height: this.state.height,
     });
     fabric.Image.fromURL(this.props.image, (img) => {
       img = this.setScale(img);
+      canvas.setWidth(img.getScaledWidth());
+      canvas.setHeight(img.getScaledHeight());
       img.set({ selectable: false });
       canvas.add(img);
       canvas.centerObject(img);
@@ -53,6 +54,9 @@ class Canvas extends Component {
     if (image === undefined) return;
     image = this.applyFilters(image);
     image = this.applySliders(image);
+    this.props.canvas.setWidth(image.getScaledWidth());
+    this.props.canvas.setHeight(image.getScaledHeight());
+    this.props.canvas.centerObject(image);
     image.applyFilters();
     this.props.canvas.renderAll();
   };

@@ -10,6 +10,7 @@ export default ({
   handleClearCanvas,
   handleSliderChange,
   handleSave,
+  selectedIndex,
   filters,
   sliders,
 }) => {
@@ -19,6 +20,7 @@ export default ({
         img={img}
         handleFilterToggle={handleFilterToggle}
         filters={filters}
+        selectedIndex={selectedIndex}
       />
       <Row className="mt-2">
         <Sliders handleSliderChange={handleSliderChange} sliders={sliders} />

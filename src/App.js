@@ -10,6 +10,7 @@ import "./App.css";
 class App extends Component {
   constructor() {
     super();
+    this.selectedIndex = null;
     this.state = {
       canvas: null,
       image: null,
@@ -95,8 +96,8 @@ class App extends Component {
     });
   };
 
-  handleFilterToggle = (e, filter) => {
-    e.preventDefault();
+  handleFilterToggle = (filter, selectedIndex) => {
+    this.selectedIndex = selectedIndex;
     let filters = [...this.state.filters];
     let index = filters.findIndex((f) => f === filter);
     filters[index].enabled = !filters[index].enabled;
@@ -127,6 +128,7 @@ class App extends Component {
             handleResetImage={this.handleResetImage}
             handleSliderChange={this.handleSliderChange}
             handleSave={this.handleSave}
+            selectedIndex={this.selectedIndex}
           />
         </>
       );
@@ -137,7 +139,7 @@ class App extends Component {
           className="justify-content-center bg-dark py-3"
           onClick={this.getRefDeets}
         >
-          <Col xs={8}>
+          <Col xs={12} sm={10} md={8}>
             <Header />
             {display}
           </Col>
