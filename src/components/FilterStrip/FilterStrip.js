@@ -1,19 +1,44 @@
 import React from "react";
 import FilterPreview from "../FilterPreview/FilterPreview";
-import { Row } from "reactstrap";
-import "./FilterStrip.css";
+import { Row, Col } from "reactstrap";
+import Flickity from "react-flickity-component";
+import "./Flickity.css";
 
-export default ({ img, filters, handleFilterToggle }) => {
-  const slides = filters.map((filter, i) => {
+const flickityOptions = {
+  initialIndex: 1,
+  pageDots: false,
+  contain: true,
+  prevNextButtons: false,
+};
+
+const fliterPreviews = (filters, img, handleFilterToggle) => {
+  return filters.map((filter, i) => {
     return (
       <FilterPreview
         key={i}
         filter={filter}
-        img={img}
         handleFilterToggle={handleFilterToggle}
-        filters={filters}
+        img={img}
       />
     );
   });
-  return <Row className="p-2 mt-2 justify-content-md-center">{slides}</Row>;
+};
+
+export default ({ img, filters, handleFilterToggle }) => {
+  return (
+    <Row>
+      <Col className="mt-5">
+        <Flickity
+          className={"carousel"} // default ''
+          elementType={"div"} // default 'div'
+          options={flickityOptions} // takes flickity options {}
+          disableImagesLoaded={false} // default false
+          reloadOnUpdate // default false
+          static // default false
+        >
+          {fliterPreviews(filters, img, handleFilterToggle)}
+        </Flickity>
+      </Col>
+    </Row>
+  );
 };
