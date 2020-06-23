@@ -11,21 +11,21 @@ const flickityOptions = {
   prevNextButtons: false,
 };
 
-const fliterPreviews = (filters, img, handleFilterToggle) => {
+const fliterPreviews = (filters, image, handleFilterToggle) => {
   return filters.map((filter, i) => {
     return (
       <FilterPreview
         key={i}
         filter={filter}
         handleFilterToggle={handleFilterToggle}
-        img={img}
+        image={image}
         selectedIndex={i}
       />
     );
   });
 };
 
-export default ({ img, filters, handleFilterToggle, selectedIndex }) => {
+export default ({ image, filters, handleFilterToggle, selectedIndex }) => {
   if (selectedIndex === null) {
     selectedIndex = filters.length / 2;
   }
@@ -41,7 +41,7 @@ export default ({ img, filters, handleFilterToggle, selectedIndex }) => {
           reloadOnUpdate // default false
           static // default false
         >
-          {fliterPreviews(filters, img, handleFilterToggle)}
+          {fliterPreviews(filters, image, handleFilterToggle)}
         </Flickity>
       </Col>
     </Row>

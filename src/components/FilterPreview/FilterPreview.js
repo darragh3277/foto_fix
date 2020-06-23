@@ -5,19 +5,29 @@ import "./FilterPreview.css";
 class FilterPreview extends Component {
   constructor() {
     super();
+    this.width = 100;
+    this.height = 100;
     this.canvas = null;
   }
   componentDidMount = () => {
     this.canvas = new fabric.Canvas("canvas_" + this.props.filter.name, {
       selection: false,
       hoverCursor: "pointer",
-      width: 100,
-      height: 100,
+      width: this.width,
+      height: this.height,
     });
-    fabric.Image.fromURL(this.props.img, (img) => {
+  };
+
+  componentDidUpdate = () => {
+    fabric.Image.fromURL(this.props.image, (img) => {
       img.set({ selectable: false });
-      img.scaleToHeight(100);
-      img.scaleToHeight(100);
+      if (img.width >= img.height) {
+        img.scaleToHeight(this.height);
+        img.scaleToWidth(this.width);
+      } else {
+        img.scaleToWidth(this.width);
+        img.scaleToHeight(this.height);
+      }
       img.filters.push(this.props.filter.function);
       img.applyFilters();
       this.canvas.add(img);
@@ -42,8 +52,8 @@ class FilterPreview extends Component {
           }}
         ></span>
         <canvas
-          width="100px"
-          height="100px"
+          width={this.width + "px"}
+          height={this.height + "px"}
           id={"canvas_" + this.props.filter.name}
         ></canvas>
         <p

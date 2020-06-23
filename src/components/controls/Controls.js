@@ -4,7 +4,7 @@ import Sliders from "../Sliders/Sliders";
 import { Row, Button } from "reactstrap";
 
 export default ({
-  img,
+  image,
   handleFilterToggle,
   handleResetImage,
   handleClearCanvas,
@@ -17,7 +17,7 @@ export default ({
   return (
     <>
       <FilterStrip
-        img={img}
+        image={image}
         handleFilterToggle={handleFilterToggle}
         filters={filters}
         selectedIndex={selectedIndex}

@@ -31,7 +31,6 @@ class Canvas extends Component {
 
   componentDidMount = () => {
     window.addEventListener("resize", this.updateDimensions);
-    let width = this.canvasWrapperRef.current.clientWidth;
     let canvas = new fabric.Canvas("canvas", {
       selection: false,
       hoverCursor: "context-menu",

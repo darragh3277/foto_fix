@@ -8,3 +8,6 @@
 #upload-button:hover {
   opacity: 50%;
 }
+#file-size-warning {
+  font-size: 0.75rem;
+}
