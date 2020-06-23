@@ -1,3 +1,10 @@
+#upload-file {
+  display: none;
+}
 #upload-button {
-  font-size: 5rem;
+  font-size: 10rem;
+  cursor: pointer;
+}
+#upload-button:hover {
+  opacity: 50%;
 }
