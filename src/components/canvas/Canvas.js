@@ -1,100 +1,96 @@
 import React, { Component, createRef } from "react";
 import { fabric } from "fabric";
+import "./Canvas.css";
 
 class Canvas extends Component {
   constructor() {
     super();
     this.canvasWrapperRef = createRef();
-    this.state = {
-      width: 500,
-      height: 300,
-    };
+    this.canvas = null;
   }
 
   updateDimensions = () => {
-    if (
-      this.canvasWrapperRef.current === undefined ||
-      this.canvasWrapperRef.current === null
-    ) {
-      return;
-    }
-    let width = this.canvasWrapperRef.current.clientWidth;
-    let canvas = this.props.canvas;
-    let image = this.props.canvas._objects[0];
-    this.setState({ width });
-    canvas.calcOffset();
-    image = this.setScale(image);
-    canvas.setWidth(image.getScaledWidth());
-    canvas.centerObject(image);
-    canvas.renderAll();
+    let canvasWidth = this.canvasWrapperRef.current.clientWidth;
+    let canvasHeight = this.canvasWrapperRef.current.clientHeight;
+    //update canvas size
+    this.canvas.setWidth(canvasWidth);
+    this.canvas.setHeight(canvasHeight);
+    //update image size
+    let image = this.canvas._objects[0];
+    this.scaleImage(image, canvasWidth, canvasHeight);
+    this.canvas.centerObject(image);
+    //render
+    this.canvas.renderAll();
   };
 
   componentDidMount = () => {
-    window.addEventListener("resize", this.updateDimensions);
-    let canvas = new fabric.Canvas("canvas", {
+    let canvasWidth = this.canvasWrapperRef.current.clientWidth;
+    let canvasHeight = this.canvasWrapperRef.current.clientHeight;
+    //create canvas
+    this.canvas = new fabric.Canvas("canvas", {
       selection: false,
+      backgroundColor: "black",
       hoverCursor: "context-menu",
-      backgroundColor: "#2b2e31",
-      height: this.state.height,
+      height: canvasHeight,
+      width: canvasWidth,
     });
-    fabric.Image.fromURL(this.props.image, (img) => {
-      img = this.setScale(img);
-      canvas.setWidth(img.getScaledWidth());
-      canvas.setHeight(img.getScaledHeight());
-      img.set({ selectable: false });
-      canvas.add(img);
-      canvas.centerObject(img);
-    });
-    this.props.handleCanvasMount(canvas);
+    //scale image
+    let image = this.scaleImage(this.props.image, canvasWidth, canvasHeight);
+    image.set({ selectable: false });
+    this.canvas.add(image);
+    this.canvas.centerObject(image);
+    this.canvas.renderAll();
+    //register resive event listener
+    window.addEventListener("resize", this.updateDimensions);
   };
 
   componentDidUpdate = () => {
-    let image = this.props.canvas._objects[0];
-    if (image === undefined) return;
-    image = this.applyFilters(image);
-    image = this.applySliders(image);
-    this.props.canvas.setWidth(image.getScaledWidth());
-    this.props.canvas.setHeight(image.getScaledHeight());
-    this.props.canvas.centerObject(image);
+    let image = this.canvas._objects[0];
+    //remove all filters
+    //to do - look into updating rather than replacing
+    image.filters = [];
+    this.applyFilters();
+    this.applySliders();
     image.applyFilters();
-    this.props.canvas.renderAll();
+    this.canvas.renderAll();
   };
 
-  setScale = (image) => {
-    let width = this.canvasWrapperRef.current.clientWidth;
-    image.scaleToHeight(this.state.height);
+  scaleImage = (image, width, height) => {
+    image.scaleToHeight(height);
     if (image.getScaledWidth() >= width) {
       image.scaleToWidth(width);
     }
     return image;
   };
 
-  applyFilters = (image) => {
+  applyFilters = () => {
     let filters = this.props.filters;
-    image.filters = [];
+    let image = this.canvas._objects[0];
     for (let i = 0; i < filters.length; i++) {
       if (filters[i].enabled === false) continue;
       image.filters.push(filters[i].function);
     }
-    return image;
   };
 
-  applySliders = (image) => {
+  applySliders = () => {
     let sliders = this.props.sliders;
+    let image = this.canvas._objects[0];
     for (let i = 0; i < sliders.length; i++) {
       let slider = sliders[i];
-      let settings = { [slider.control]: slider.value };
-      let sliderFunction = new fabric.Image.filters[slider.functionName](
-        settings
-      );
+      let sliderFunction = new fabric.Image.filters[slider.functionName]({
+        [slider.control]: parseFloat(slider.value),
+      });
       image.filters.push(sliderFunction);
     }
-    return image;
   };
 
   render = () => {
     return (
-      <div ref={this.canvasWrapperRef} className="row justify-content-center">
+      <div
+        ref={this.canvasWrapperRef}
+        id="main-canvas-wrapper"
+        className="row justify-content-center"
+      >
         <canvas id="canvas" />
       </div>
     );

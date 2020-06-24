@@ -5,6 +5,7 @@ import Controls from "./components/Controls/Controls";
 import Upload from "./components/Upload/Upload";
 import { sliders, filters } from "./filters/Filters";
 import { Container, Row, Col } from "reactstrap";
+import { fabric } from "fabric";
 import "./App.css";
 
 class App extends Component {
@@ -12,74 +13,59 @@ class App extends Component {
     super();
     this.selectedIndex = null;
     this.state = {
-      canvas: null,
       image: null,
-      selectedFilters: [],
+      previewImage: null,
       filters,
       sliders,
-      fileSizeWarning: false,
     };
   }
 
-  handleCanvasMount = (canvas) => {
-    this.setState({
-      canvas,
-    });
-  };
-
   handleImageUpload = (e) => {
     if (e.target.files.length < 1) return;
-    if (e.target.files[0].size > 500000) {
-      this.setState({
-        fileSizeWarning: true,
-      });
-      return;
-    }
     let url = URL.createObjectURL(e.target.files[0]);
-    this.setState({
-      image: url,
+    fabric.Image.fromURL(url, (img) => {
+      img.image_id = "test1";
+      this.setState({
+        image: img,
+      });
+    });
+    fabric.Image.fromURL(url, (img) => {
+      img.image_id = "test2";
+      this.setState({
+        previewImage: img,
+      });
     });
   };
 
   handleClearCanvas = () => {
-    let canvas = null;
-    let sliders = [...this.state.sliders];
+    let sliders = this.state.sliders;
     for (let i = 0; i < sliders.length; i++) {
       sliders[i].value = sliders[i].defaultValue;
     }
-    let filters = [...this.state.filters];
+    let filters = this.state.filters;
     for (let i = 0; i < filters.length; i++) {
       filters[i].enabled = false;
     }
     this.setState({
-      canvas,
-      selectedFilters: [],
       image: null,
+      previewImage: null,
       filters,
       sliders,
-      fileSizeWarning: false,
     });
   };
 
   handleResetImage = () => {
-    let canvas = this.state.canvas;
-    canvas._objects[0].filters = [];
-    canvas._objects[0].applyFilters();
-    canvas.renderAll();
-    let sliders = [...this.state.sliders];
+    let sliders = this.state.sliders;
     for (let i = 0; i < sliders.length; i++) {
       sliders[i].value = sliders[i].defaultValue;
     }
-    let filters = [...this.state.filters];
+    let filters = this.state.filters;
     for (let i = 0; i < filters.length; i++) {
       filters[i].enabled = false;
     }
     this.setState({
-      canvas,
       sliders,
-      selectedFilters: [],
       filters,
-      fileSizeWarning: false,
     });
   };
 
@@ -97,7 +83,7 @@ class App extends Component {
   };
 
   handleSliderChange = (slider, value) => {
-    let sliders = [...this.state.sliders];
+    let sliders = this.state.sliders;
     let index = sliders.findIndex((s) => s === slider);
     sliders[index].value = value;
     this.setState({
@@ -107,7 +93,7 @@ class App extends Component {
 
   handleFilterToggle = (filter, selectedIndex) => {
     this.selectedIndex = selectedIndex;
-    let filters = [...this.state.filters];
+    let filters = this.state.filters;
     let index = filters.findIndex((f) => f === filter);
     filters[index].enabled = !filters[index].enabled;
     this.setState({
@@ -116,25 +102,18 @@ class App extends Component {
   };
 
   render = () => {
-    let display = (
-      <Upload
-        onChange={this.handleImageUpload}
-        fileSizeWarning={this.state.fileSizeWarning}
-      />
-    );
-    if (this.state.image !== null) {
+    let display = <Upload onChange={this.handleImageUpload} />;
+    if (this.state.image !== null && this.state.previewImage !== null) {
       display = (
         <>
           <Canvas
             canvas={this.state.canvas}
             image={this.state.image}
-            selectedFilters={this.state.selectedFilters}
             filters={this.state.filters}
             sliders={this.state.sliders}
-            handleCanvasMount={this.handleCanvasMount}
           />
           <Controls
-            image={this.state.image}
+            image={this.state.previewImage}
             sliders={this.state.sliders}
             filters={this.state.filters}
             handleFilterToggle={this.handleFilterToggle}

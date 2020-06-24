@@ -8,7 +8,7 @@ export default ({ onChange, fileSizeWarning }) => {
     <>
       <Row className="justify-content-center mt-5">
         <label htmlFor="upload-file">
-          <RiImageAddLine className="text-light" id="upload-button" />
+          <RiImageAddLine id="upload-button" />
         </label>
         <input
           type="file"
@@ -19,7 +19,7 @@ export default ({ onChange, fileSizeWarning }) => {
       </Row>
       {fileSizeWarning && (
         <p className="text-danger text-center" id="file-size-warning">
-          File must be less than 500kb
+          File must be less than 1MB
         </p>
       )}
     </>
