@@ -8,14 +8,19 @@ import { Container, Row, Col } from "reactstrap";
 import { fabric } from "fabric";
 import "./App.css";
 
+const textureSize = 2048;
+const previewImageSize = 100;
+
 class App extends Component {
   constructor() {
     super();
     this.selectedIndex = null;
-    this.textureSize = 2048;
+    // this.textureSize = 2048;
+    // this.previewImageSize = 100;
     this.state = {
       image: null,
       previewImage: null,
+      loading: false,
       filters,
       sliders,
     };
@@ -55,10 +60,13 @@ class App extends Component {
 
   handleImageUpload = async (e) => {
     if (e.target.files.length < 1) return;
+    this.setState({
+      loading: true,
+    });
     let objectUrl = URL.createObjectURL(e.target.files[0]);
     //resize if needed
-    let imageUrl = await this.resizeImage(this.textureSize, objectUrl);
-    let previewImageUrl = await this.resizeImage(100, objectUrl);
+    let imageUrl = await this.resizeImage(textureSize, objectUrl);
+    let previewImageUrl = await this.resizeImage(previewImageSize, objectUrl);
     fabric.Image.fromURL(imageUrl, (image) => {
       this.setState({
         image,
@@ -83,6 +91,7 @@ class App extends Component {
     this.setState({
       image: null,
       previewImage: null,
+      loading: false,
       filters,
       sliders,
     });
@@ -137,7 +146,19 @@ class App extends Component {
 
   render = () => {
     let display = <Upload onChange={this.handleImageUpload} />;
-    if (this.state.image !== null && this.state.previewImage !== null) {
+    if (
+      this.state.loading &&
+      this.state.image === null &&
+      this.state.previewImage === null
+    ) {
+      display = (
+        <div className="row justify-content-center mt-5">
+          <div className="spinner-border text-light" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      );
+    } else if (this.state.image !== null && this.state.previewImage !== null) {
       display = (
         <>
           <Canvas
