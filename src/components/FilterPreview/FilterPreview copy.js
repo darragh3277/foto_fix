@@ -7,52 +7,34 @@ class FilterPreview extends Component {
     super();
     this.width = 100;
     this.height = 100;
+    this.canvas = null;
   }
-
   componentDidMount = () => {
-    let canvas = new fabric.Canvas("canvas_" + this.props.filter.name, {
+    this.canvas = new fabric.Canvas("canvas_" + this.props.filter.name, {
       selection: false,
       hoverCursor: "pointer",
       width: this.width,
       height: this.height,
     });
-    // let image = this.props.image;
-    // canvas.add(image);
-    // let canvasImage = canvas._objects[0];
     let image = this.props.image;
     image.set({ selectable: false });
-    this.scaleImage(image, this.width, this.height);
-    this.setupFilters();
-    //apply filter to canvas image
-    // image.filters = [];
-    // image.filters.push(
-    //   new fabric.Image.filters[this.props.filter.functionName]()
-    // );
-    // console.log(image.filters[1].__proto__.type);
+    if (image.width >= image.height) {
+      image.scaleToHeight(this.height);
+      image.scaleToWidth(this.width);
+    } else {
+      image.scaleToWidth(this.width);
+      image.scaleToHeight(this.height);
+    }
+    image.filters = [];
+    let x = new fabric.Image.filters[this.props.filter.functionName]();
+    image.filters.push(x);
+    console.log(image.filters);
     image.applyFilters();
-    canvas.add(image);
-    canvas.centerObject(image);
-    canvas.renderAll();
-  };
-
-  setupFilters = () => {
-    let image = this.props.image;
-    //remove
-    for (let i = 0; i < image.filters.length; i++) {
-      if (image.filters[i].__proto__.type === "Resize") continue;
-      image.filters.splice(i, 1);
-    }
-    //add
-    image.filters.push(
-      new fabric.Image.filters[this.props.filter.functionName]()
-    );
-  };
-
-  scaleImage = (image, width, height) => {
-    image.scaleToHeight(height);
-    if (image.getScaledWidth() >= width) {
-      image.scaleToWidth(width);
-    }
+    console.log("f", image.getScaledHeight(), image.getScaledWidth());
+    this.canvas.add(image);
+    this.canvas.centerObject(image);
+    this.canvas.renderAll();
+    console.log("f - m", image.image_id);
   };
 
   render = () => {
