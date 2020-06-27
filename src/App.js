@@ -12,6 +12,7 @@ class App extends Component {
   constructor() {
     super();
     this.selectedIndex = null;
+    this.textureSize = 2048;
     this.state = {
       image: null,
       previewImage: null,
@@ -20,19 +21,52 @@ class App extends Component {
     };
   }
 
-  handleImageUpload = (e) => {
+  //resize the image if one of the sides of the image exceeds the max texture size
+  //if the image requires resizing, create a canvas element but don't attach to DOM
+  //size the canvas with the largest size being equal to the max texture size
+  //then scale the image down to the correct size when adding to the canvas
+  resizeImage = (maxSize, imageUrl) => {
+    return new Promise((resolve) => {
+      let image = new Image();
+      image.src = imageUrl;
+      image.onload = (img) => {
+        //check if resizing is required
+        if (Math.max(img.target.width, img.target.height) > maxSize) {
+          //create canvas
+          let canvas = document.createElement("canvas");
+          //scale image
+          if (img.target.height >= img.target.width) {
+            canvas.height = maxSize;
+            canvas.width = (maxSize / img.target.height) * img.target.width;
+          } else {
+            canvas.width = maxSize;
+            canvas.height = (maxSize / img.target.width) * img.target.height;
+          }
+          //draw to canvas
+          let context = canvas.getContext("2d");
+          context.drawImage(img.target, 0, 0, canvas.width, canvas.height);
+          //assign new image url
+          resolve(context.canvas.toDataURL());
+        }
+        resolve(imageUrl);
+      };
+    });
+  };
+
+  handleImageUpload = async (e) => {
     if (e.target.files.length < 1) return;
-    let url = URL.createObjectURL(e.target.files[0]);
-    fabric.Image.fromURL(url, (img) => {
-      img.image_id = "test1";
+    let objectUrl = URL.createObjectURL(e.target.files[0]);
+    //resize if needed
+    let imageUrl = await this.resizeImage(this.textureSize, objectUrl);
+    let previewImageUrl = await this.resizeImage(100, objectUrl);
+    fabric.Image.fromURL(imageUrl, (image) => {
       this.setState({
-        image: img,
+        image,
       });
     });
-    fabric.Image.fromURL(url, (img) => {
-      img.image_id = "test2";
+    fabric.Image.fromURL(previewImageUrl, (previewImage) => {
       this.setState({
-        previewImage: img,
+        previewImage,
       });
     });
   };
@@ -109,6 +143,7 @@ class App extends Component {
           <Canvas
             canvas={this.state.canvas}
             image={this.state.image}
+            imageUrl={this.state.imageUrl}
             filters={this.state.filters}
             sliders={this.state.sliders}
           />

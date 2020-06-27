@@ -8,6 +8,7 @@ class FilterPreview extends Component {
     this.width = 100;
     this.height = 100;
   }
+
   componentDidMount = () => {
     let canvas = new fabric.Canvas("canvas_" + this.props.filter.name, {
       selection: false,
@@ -15,18 +16,36 @@ class FilterPreview extends Component {
       width: this.width,
       height: this.height,
     });
+    // let image = this.props.image;
+    // canvas.add(image);
+    // let canvasImage = canvas._objects[0];
     let image = this.props.image;
     image.set({ selectable: false });
     this.scaleImage(image, this.width, this.height);
-    canvas.add(image);
-    let canvasImage = canvas._objects[0];
+    this.setupFilters();
     //apply filter to canvas image
-    canvasImage.filters.push(
+    // image.filters = [];
+    // image.filters.push(
+    //   new fabric.Image.filters[this.props.filter.functionName]()
+    // );
+    // console.log(image.filters[1].__proto__.type);
+    image.applyFilters();
+    canvas.add(image);
+    canvas.centerObject(image);
+    canvas.renderAll();
+  };
+
+  setupFilters = () => {
+    let image = this.props.image;
+    //remove
+    for (let i = 0; i < image.filters.length; i++) {
+      if (image.filters[i].__proto__.type === "Resize") continue;
+      image.filters.splice(i, 1);
+    }
+    //add
+    image.filters.push(
       new fabric.Image.filters[this.props.filter.functionName]()
     );
-    canvasImage.applyFilters();
-    canvas.centerObject(canvasImage);
-    canvas.renderAll();
   };
 
   scaleImage = (image, width, height) => {

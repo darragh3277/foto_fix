@@ -1,45 +1,38 @@
-import { fabric } from "fabric";
 export const filters = [
   {
     id: 1,
     name: "Grayscale",
     functionName: "Grayscale",
-    function: new fabric.Image.filters.Grayscale(),
     enabled: false,
   },
   {
     id: 2,
     name: "Vintage",
     functionName: "Vintage",
-    function: new fabric.Image.filters.Vintage(),
     enabled: false,
   },
   {
     id: 3,
     name: "Sepia",
     functionName: "Sepia",
-    function: new fabric.Image.filters.Sepia(),
     enabled: false,
   },
   {
     id: 4,
     name: "Polaroid",
     functionName: "Polaroid",
-    function: new fabric.Image.filters.Polaroid(),
     enabled: false,
   },
   {
     id: 5,
     name: "Black & White",
     functionName: "BlackWhite",
-    function: new fabric.Image.filters.BlackWhite(),
     enabled: false,
   },
   {
     id: 6,
     name: "Kodachrome",
     functionName: "Kodachrome",
-    function: new fabric.Image.filters.Kodachrome(),
     enabled: false,
   },
 ];

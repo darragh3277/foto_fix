@@ -34,8 +34,9 @@ class Canvas extends Component {
       height: canvasHeight,
       width: canvasWidth,
     });
+    let image = this.props.image;
     //scale image
-    let image = this.scaleImage(this.props.image, canvasWidth, canvasHeight);
+    this.scaleImage(image, canvasWidth, canvasHeight);
     image.set({ selectable: false });
     this.canvas.add(image);
     this.canvas.centerObject(image);
@@ -46,8 +47,6 @@ class Canvas extends Component {
 
   componentDidUpdate = () => {
     let image = this.canvas._objects[0];
-    //remove all filters
-    //to do - look into updating rather than replacing
     image.filters = [];
     this.applyFilters();
     this.applySliders();
@@ -60,7 +59,6 @@ class Canvas extends Component {
     if (image.getScaledWidth() >= width) {
       image.scaleToWidth(width);
     }
-    return image;
   };
 
   applyFilters = () => {
@@ -68,7 +66,9 @@ class Canvas extends Component {
     let image = this.canvas._objects[0];
     for (let i = 0; i < filters.length; i++) {
       if (filters[i].enabled === false) continue;
-      image.filters.push(filters[i].function);
+      let filter = filters[i];
+      let filterFunction = new fabric.Image.filters[filter.functionName]();
+      image.filters.push(filterFunction);
     }
   };
 
@@ -77,8 +77,10 @@ class Canvas extends Component {
     let image = this.canvas._objects[0];
     for (let i = 0; i < sliders.length; i++) {
       let slider = sliders[i];
+      let value = parseFloat(slider.value);
+      if (value === 0) continue;
       let sliderFunction = new fabric.Image.filters[slider.functionName]({
-        [slider.control]: parseFloat(slider.value),
+        [slider.control]: value,
       });
       image.filters.push(sliderFunction);
     }
