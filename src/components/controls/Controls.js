@@ -25,7 +25,7 @@ export default ({
       <Row className="mt-2">
         <Sliders handleSliderChange={handleSliderChange} sliders={sliders} />
       </Row>
-      <Row className="justify-content-center mt-2">
+      <Row className="justify-content-center m-2">
         <Button
           onClick={handleSave}
           outline

@@ -183,12 +183,9 @@ class App extends Component {
       );
     }
     return (
-      <Container fluid className="bg-dark">
-        <Row
-          className="justify-content-center bg-dark py-3"
-          onClick={this.getRefDeets}
-        >
-          <Col xs={12} sm={10} md={8}>
+      <Container fluid className="bg-dark min-vh-100 d-flex flex-column">
+        <Row className="justify-content-center bg-dark min-vh-100">
+          <Col xs={12} sm={10} md={8} className="d-flex flex-column">
             <Header />
             {display}
           </Col>

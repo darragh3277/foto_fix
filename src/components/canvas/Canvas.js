@@ -24,6 +24,7 @@ class Canvas extends Component {
   };
 
   componentDidMount = () => {
+    console.log("mounting: ", this.canvasWrapperRef);
     let canvasWidth = this.canvasWrapperRef.current.clientWidth;
     let canvasHeight = this.canvasWrapperRef.current.clientHeight;
     //create canvas
@@ -42,6 +43,7 @@ class Canvas extends Component {
     this.canvas.centerObject(image);
     this.canvas.renderAll();
     //register resive event listener
+    console.log(window);
     window.addEventListener("resize", this.updateDimensions);
   };
 
@@ -52,6 +54,11 @@ class Canvas extends Component {
     this.applySliders();
     image.applyFilters();
     this.canvas.renderAll();
+  };
+
+  //remove the window event listener on unmount
+  componentWillUnmount = () => {
+    window.removeEventListener("resize", this.updateDimensions);
   };
 
   scaleImage = (image, width, height) => {
@@ -91,7 +98,7 @@ class Canvas extends Component {
       <div
         ref={this.canvasWrapperRef}
         id="main-canvas-wrapper"
-        className="row justify-content-center"
+        className="row justify-content-center h-100 flex-grow-1"
       >
         <canvas id="canvas" />
       </div>

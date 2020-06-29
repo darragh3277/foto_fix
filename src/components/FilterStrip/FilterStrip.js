@@ -32,7 +32,7 @@ export default ({ image, filters, handleFilterToggle, selectedIndex }) => {
   flickityOptions.initialIndex = selectedIndex;
   return (
     <Row>
-      <Col className="mt-5">
+      <Col className="mt-2 px-0">
         <Flickity
           className={"carousel"} // default ''
           elementType={"div"} // default 'div'
