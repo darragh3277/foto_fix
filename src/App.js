@@ -15,8 +15,6 @@ class App extends Component {
   constructor() {
     super();
     this.selectedIndex = null;
-    // this.textureSize = 2048;
-    // this.previewImageSize = 100;
     this.state = {
       image: null,
       previewImage: null,
@@ -162,9 +160,7 @@ class App extends Component {
       display = (
         <>
           <Canvas
-            canvas={this.state.canvas}
             image={this.state.image}
-            imageUrl={this.state.imageUrl}
             filters={this.state.filters}
             sliders={this.state.sliders}
           />
@@ -184,8 +180,8 @@ class App extends Component {
     }
     return (
       <Container fluid className="bg-dark min-vh-100 d-flex flex-column">
-        <Row className="justify-content-center bg-dark min-vh-100">
-          <Col xs={12} sm={10} md={8} className="d-flex flex-column">
+        <Row className="justify-content-center min-vh-100">
+          <Col xs={12} sm={10} md={8} className="d-flex flex-column min-vh-100">
             <Header />
             {display}
           </Col>

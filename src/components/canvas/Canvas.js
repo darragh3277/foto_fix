@@ -3,15 +3,16 @@ import { fabric } from "fabric";
 import "./Canvas.css";
 
 class Canvas extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.canvasWrapperRef = createRef();
     this.canvas = null;
   }
 
   updateDimensions = () => {
-    let canvasWidth = this.canvasWrapperRef.current.clientWidth;
-    let canvasHeight = this.canvasWrapperRef.current.clientHeight;
+    let canvasWidth = this.canvasWrapperRef.clientWidth;
+    let canvasHeight = this.canvasWrapperRef.clientHeight;
+    console.log(canvasHeight);
     //update canvas size
     this.canvas.setWidth(canvasWidth);
     this.canvas.setHeight(canvasHeight);
@@ -24,9 +25,9 @@ class Canvas extends Component {
   };
 
   componentDidMount = () => {
-    console.log("mounting: ", this.canvasWrapperRef);
-    let canvasWidth = this.canvasWrapperRef.current.clientWidth;
-    let canvasHeight = this.canvasWrapperRef.current.clientHeight;
+    console.log("mounting", this.canvasWrapperRef.clientHeight);
+    let canvasWidth = this.canvasWrapperRef.clientWidth;
+    let canvasHeight = this.canvasWrapperRef.clientHeight;
     //create canvas
     this.canvas = new fabric.Canvas("canvas", {
       selection: false,
@@ -42,8 +43,8 @@ class Canvas extends Component {
     this.canvas.add(image);
     this.canvas.centerObject(image);
     this.canvas.renderAll();
+    console.log(this.canvasWrapperRef.clientHeight);
     //register resive event listener
-    console.log(window);
     window.addEventListener("resize", this.updateDimensions);
   };
 
@@ -96,9 +97,11 @@ class Canvas extends Component {
   render = () => {
     return (
       <div
-        ref={this.canvasWrapperRef}
+        ref={(wrapper) => {
+          this.canvasWrapperRef = wrapper;
+        }}
         id="main-canvas-wrapper"
-        className="row justify-content-center h-100 flex-grow-1"
+        className="row justify-content-center flex-grow-1 "
       >
         <canvas id="canvas" />
       </div>
