@@ -29,7 +29,7 @@ class Canvas extends Component {
     let canvasWidth = this.canvasWrapperRef.clientWidth;
     let canvasHeight = this.canvasWrapperRef.clientHeight;
     //create canvas
-    this.canvas = new fabric.Canvas("canvas", {
+    this.canvas = new fabric.StaticCanvas("canvas", {
       selection: false,
       backgroundColor: "black",
       hoverCursor: "context-menu",
