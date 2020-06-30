@@ -3,11 +3,11 @@ import { Row } from "reactstrap";
 import { RiImageAddLine } from "react-icons/ri";
 import "./Upload.css";
 
-export default ({ onChange, fileSizeWarning }) => {
+export default ({ onChange }) => {
   return (
     <>
-      <Row className="justify-content-center mt-5">
-        <label htmlFor="upload-file">
+      <Row className="justify-content-center flex-grow-1">
+        <label htmlFor="upload-file" className="mt-5">
           <RiImageAddLine id="upload-button" />
         </label>
         <input
@@ -17,11 +17,6 @@ export default ({ onChange, fileSizeWarning }) => {
           accept="image/png, image/jpeg"
         />
       </Row>
-      {fileSizeWarning && (
-        <p className="text-danger text-center" id="file-size-warning">
-          File must be less than 1MB
-        </p>
-      )}
     </>
   );
 };

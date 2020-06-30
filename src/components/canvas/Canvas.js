@@ -3,15 +3,16 @@ import { fabric } from "fabric";
 import "./Canvas.css";
 
 class Canvas extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.canvasWrapperRef = createRef();
     this.canvas = null;
   }
 
   updateDimensions = () => {
-    let canvasWidth = this.canvasWrapperRef.current.clientWidth;
-    let canvasHeight = this.canvasWrapperRef.current.clientHeight;
+    let canvasWidth = this.canvasWrapperRef.clientWidth;
+    let canvasHeight = this.canvasWrapperRef.clientHeight;
+    console.log(canvasHeight);
     //update canvas size
     this.canvas.setWidth(canvasWidth);
     this.canvas.setHeight(canvasHeight);
@@ -24,10 +25,11 @@ class Canvas extends Component {
   };
 
   componentDidMount = () => {
-    let canvasWidth = this.canvasWrapperRef.current.clientWidth;
-    let canvasHeight = this.canvasWrapperRef.current.clientHeight;
+    console.log("mounting", this.canvasWrapperRef.clientHeight);
+    let canvasWidth = this.canvasWrapperRef.clientWidth;
+    let canvasHeight = this.canvasWrapperRef.clientHeight;
     //create canvas
-    this.canvas = new fabric.Canvas("canvas", {
+    this.canvas = new fabric.StaticCanvas("canvas", {
       selection: false,
       backgroundColor: "black",
       hoverCursor: "context-menu",
@@ -41,6 +43,7 @@ class Canvas extends Component {
     this.canvas.add(image);
     this.canvas.centerObject(image);
     this.canvas.renderAll();
+    console.log(this.canvasWrapperRef.clientHeight);
     //register resive event listener
     window.addEventListener("resize", this.updateDimensions);
   };
@@ -52,6 +55,11 @@ class Canvas extends Component {
     this.applySliders();
     image.applyFilters();
     this.canvas.renderAll();
+  };
+
+  //remove the window event listener on unmount
+  componentWillUnmount = () => {
+    window.removeEventListener("resize", this.updateDimensions);
   };
 
   scaleImage = (image, width, height) => {
@@ -89,9 +97,11 @@ class Canvas extends Component {
   render = () => {
     return (
       <div
-        ref={this.canvasWrapperRef}
+        ref={(wrapper) => {
+          this.canvasWrapperRef = wrapper;
+        }}
         id="main-canvas-wrapper"
-        className="row justify-content-center"
+        className="row justify-content-center flex-grow-1 "
       >
         <canvas id="canvas" />
       </div>
