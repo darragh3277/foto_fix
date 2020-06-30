@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import Canvas from "./components/Canvas/Canvas";
-import Header from "./components/Header/Header";
 import Controls from "./components/Controls/Controls";
 import Upload from "./components/Upload/Upload";
 import { sliders, filters } from "./filters/Filters";
@@ -16,7 +15,7 @@ class App extends Component {
     super();
     this.selectedIndex = null;
     this.state = {
-      showModal: true,
+      showModal: !true,
       image: null,
       previewImage: null,
       loading: false,
@@ -67,13 +66,13 @@ class App extends Component {
     let imageUrl = await this.resizeImage(textureSize, objectUrl);
     let previewImageUrl = await this.resizeImage(previewImageSize, objectUrl);
     fabric.Image.fromURL(imageUrl, (image) => {
-      this.setState({
-        image,
-      });
-    });
-    fabric.Image.fromURL(previewImageUrl, (previewImage) => {
-      this.setState({
-        previewImage,
+      fabric.Image.fromURL(previewImageUrl, (previewImage) => {
+        this.setState({
+          image,
+          previewImage,
+          showModal: false,
+          loading: false,
+        });
       });
     });
   };
@@ -146,22 +145,38 @@ class App extends Component {
   render = () => {
     return (
       <>
-        <Container fluid className="min-vh-100 bg-dark d-flex flex-column p-0">
+        <Container
+          fluid
+          id="main-container"
+          className="min-vh-100 bg-dark d-flex flex-column p-0"
+        >
           {/* Header */}
           <nav className="navbar navbar-dark bg-dark shadow border-bottom border-dark">
             <span className="navbar-brand mb-0 h1">FotoFix</span>
           </nav>
           {/* Canvas */}
-          <div id="canvas-wrapper" className="bg-secondary flex-grow-1">
-            <canvas id="main-canvas" className="bg-transparent" />
-          </div>
+          <Canvas
+            image={this.state.image}
+            filters={this.state.filters}
+            sliders={this.state.sliders}
+          />
           {/* Controls */}
-          <div id="controls-wrapper" className="border-top border-dark">
-            <div>Controls</div>
-          </div>
+          <Controls
+            image={this.state.previewImage}
+            loading={this.state.loading}
+            sliders={this.state.sliders}
+            filters={this.state.filters}
+            handleFilterToggle={this.handleFilterToggle}
+            handleClearCanvas={this.handleClearCanvas}
+            handleResetImage={this.handleResetImage}
+            handleSliderChange={this.handleSliderChange}
+            handleSave={this.handleSave}
+            selectedIndex={this.selectedIndex}
+          />
           <Upload
             showModal={this.state.showModal}
             handleImageUpload={this.handleImageUpload}
+            loading={this.state.loading}
           />
         </Container>
       </>

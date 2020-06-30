@@ -18,7 +18,9 @@ class FilterPreview extends Component {
     });
     let image = this.props.image;
     image.set({ selectable: false });
-    image.scaleToWidth(this.width);
+    image.width >= image.height
+      ? image.scaleToHeight(this.height)
+      : image.scaleToWidth(this.width);
     this.setupFilters();
     image.applyFilters();
     canvas.add(image);
