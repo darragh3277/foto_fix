@@ -3,3 +3,11 @@ body,
 #root {
   height: 100%;
 }
+#controls-wrapper {
+  min-height: 30vh;
+}
+#canvas-wrapper {
+  background-image: linear-gradient(#343a40 0.05rem, transparent 0.05rem),
+    linear-gradient(90deg, #343a40 0.05rem, transparent 0.05rem);
+  background-size: 0.7rem 0.7rem;
+}

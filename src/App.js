@@ -4,7 +4,7 @@ import Header from "./components/Header/Header";
 import Controls from "./components/Controls/Controls";
 import Upload from "./components/Upload/Upload";
 import { sliders, filters } from "./filters/Filters";
-import { Container, Row, Col } from "reactstrap";
+import { Container } from "reactstrap";
 import { fabric } from "fabric";
 import "./App.css";
 
@@ -16,6 +16,7 @@ class App extends Component {
     super();
     this.selectedIndex = null;
     this.state = {
+      showModal: true,
       image: null,
       previewImage: null,
       loading: false,
@@ -143,50 +144,27 @@ class App extends Component {
   };
 
   render = () => {
-    let display = <Upload onChange={this.handleImageUpload} />;
-    if (
-      this.state.loading &&
-      this.state.image === null &&
-      this.state.previewImage === null
-    ) {
-      display = (
-        <div className="row justify-content-center mt-5">
-          <div className="spinner-border text-light" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div>
-      );
-    } else if (this.state.image !== null && this.state.previewImage !== null) {
-      display = (
-        <>
-          <Canvas
-            image={this.state.image}
-            filters={this.state.filters}
-            sliders={this.state.sliders}
-          />
-          <Controls
-            image={this.state.previewImage}
-            sliders={this.state.sliders}
-            filters={this.state.filters}
-            handleFilterToggle={this.handleFilterToggle}
-            handleClearCanvas={this.handleClearCanvas}
-            handleResetImage={this.handleResetImage}
-            handleSliderChange={this.handleSliderChange}
-            handleSave={this.handleSave}
-            selectedIndex={this.selectedIndex}
-          />
-        </>
-      );
-    }
     return (
-      <Container fluid className="bg-dark min-vh-100 d-flex flex-column">
-        <Row className="justify-content-center min-vh-100">
-          <Col xs={12} sm={10} md={8} className="d-flex flex-column min-vh-100">
-            <Header />
-            {display}
-          </Col>
-        </Row>
-      </Container>
+      <>
+        <Container fluid className="min-vh-100 bg-dark d-flex flex-column p-0">
+          {/* Header */}
+          <nav className="navbar navbar-dark bg-dark shadow border-bottom border-dark">
+            <span className="navbar-brand mb-0 h1">FotoFix</span>
+          </nav>
+          {/* Canvas */}
+          <div id="canvas-wrapper" className="bg-secondary flex-grow-1">
+            <canvas id="main-canvas" className="bg-transparent" />
+          </div>
+          {/* Controls */}
+          <div id="controls-wrapper" className="border-top border-dark">
+            <div>Controls</div>
+          </div>
+          <Upload
+            showModal={this.state.showModal}
+            handleImageUpload={this.handleImageUpload}
+          />
+        </Container>
+      </>
     );
   };
 }
