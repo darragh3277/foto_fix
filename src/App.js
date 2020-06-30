@@ -15,7 +15,7 @@ class App extends Component {
     super();
     this.selectedIndex = null;
     this.state = {
-      showModal: !true,
+      showModal: true,
       image: null,
       previewImage: null,
       loading: false,

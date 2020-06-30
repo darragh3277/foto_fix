@@ -3,62 +3,67 @@ import FilterStrip from "../FilterStrip/FilterStrip";
 import Sliders from "../Sliders/Sliders";
 import { Row, Button } from "reactstrap";
 
-const emptyControlPanel = () => {
-  return <div id="controls-wrapper" className="border-top border-dark"></div>;
-};
-
 const controlPanel = (
+  filterActive,
   image,
   handleFilterToggle,
-  handleResetImage,
-  handleClearCanvas,
   handleSliderChange,
-  handleSave,
   selectedIndex,
   filters,
   sliders
 ) => {
-  return (
-    <div id="controls-wrapper" className="border-top border-dark">
+  if (filterActive) {
+    return (
       <FilterStrip
         image={image}
         handleFilterToggle={handleFilterToggle}
         filters={filters}
         selectedIndex={selectedIndex}
       />
+    );
+  } else {
+    return (
       <Row className="m-0">
         <Sliders handleSliderChange={handleSliderChange} sliders={sliders} />
       </Row>
-      <Row className="justify-content-center m-2">
-        <Button
-          onClick={handleSave}
-          outline
-          color="light"
-          size="sm"
-          className="m-1"
-        >
-          Save
-        </Button>
-        <Button
-          onClick={handleResetImage}
-          outline
-          color="light"
-          size="sm"
-          className="m-1"
-        >
-          Reset
-        </Button>
-        <Button
-          onClick={handleClearCanvas}
-          outline
-          color="danger"
-          size="sm"
-          className="m-1"
-        >
-          New Image
-        </Button>
-      </Row>
-    </div>
+    );
+  }
+};
+
+const controlButtons = ({
+  handleSave,
+  handleResetImage,
+  handleClearCanvas,
+}) => {
+  return (
+    <Row className="justify-content-center m-2">
+      <Button
+        onClick={handleSave}
+        outline
+        color="light"
+        size="sm"
+        className="m-1"
+      >
+        Save
+      </Button>
+      <Button
+        onClick={handleResetImage}
+        outline
+        color="light"
+        size="sm"
+        className="m-1"
+      >
+        Reset
+      </Button>
+      <Button
+        onClick={handleClearCanvas}
+        color="danger"
+        size="sm"
+        className="m-1"
+      >
+        New Image
+      </Button>
+    </Row>
   );
 };
 
@@ -74,21 +79,19 @@ export default ({
   sliders,
   loading,
 }) => {
-  let display = emptyControlPanel();
+  const [filterActive, setFilterActive] = useState(true);
+  let display = null;
   if (loading === false && image !== null) {
     display = controlPanel(
+      filterActive,
       image,
       handleFilterToggle,
-      handleResetImage,
-      handleClearCanvas,
-      handleSliderChange,
       handleSave,
       selectedIndex,
       filters,
       sliders
     );
   }
-  const [filterActive, setFilterActive] = useState(true);
   return (
     <>
       <div
@@ -115,7 +118,10 @@ export default ({
           Edit
         </button>
       </div>
-      {display}
+      <div id="controls-wrapper" className="border-top border-dark">
+        {display}
+      </div>
+      {controlButtons(handleResetImage, handleClearCanvas, handleSliderChange)}
     </>
   );
 };

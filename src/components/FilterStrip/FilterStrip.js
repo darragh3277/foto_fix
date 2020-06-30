@@ -1,6 +1,6 @@
 import React from "react";
 import FilterPreview from "../FilterPreview/FilterPreview";
-import { Row, Col } from "reactstrap";
+import { Col } from "reactstrap";
 import Flickity from "react-flickity-component";
 import "./Flickity.css";
 
