@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Canvas from "./components/Canvas/Canvas";
 import Controls from "./components/Controls/Controls";
 import Upload from "./components/Upload/Upload";
+import { MdLinkedCamera } from "react-icons/md";
 import { sliders, filters } from "./filters/Filters";
 import { Container } from "reactstrap";
 import { fabric } from "fabric";
@@ -161,7 +162,10 @@ class App extends Component {
         >
           {/* Header */}
           <nav className="navbar navbar-dark bg-dark shadow border-bottom border-dark">
-            <span className="navbar-brand mb-0 h1">FotoFix</span>
+            <span className="navbar-brand mb-0 h1">
+              <MdLinkedCamera className="mb-1 mr-1" />
+              FotoFix
+            </span>
           </nav>
           {/* Canvas */}
           <Canvas

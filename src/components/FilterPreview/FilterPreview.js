@@ -60,7 +60,7 @@ class FilterPreview extends Component {
         ></canvas>
         <p
           className="text-light text-center label my-1"
-          onClick={(e) => {
+          onClick={() => {
             this.props.handleFilterToggle(
               this.props.filter,
               this.props.selectedIndex
