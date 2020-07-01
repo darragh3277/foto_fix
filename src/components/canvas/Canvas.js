@@ -12,54 +12,53 @@ class Canvas extends Component {
   updateDimensions = () => {
     let canvasWidth = this.canvasWrapperRef.clientWidth;
     let canvasHeight = this.canvasWrapperRef.clientHeight;
-    console.log(canvasHeight);
     //update canvas size
     this.canvas.setWidth(canvasWidth);
     this.canvas.setHeight(canvasHeight);
     //update image size
     let image = this.canvas._objects[0];
-    this.scaleImage(image, canvasWidth, canvasHeight);
-    this.canvas.centerObject(image);
+    if (image !== undefined) {
+      this.scaleImage(image, canvasWidth, canvasHeight);
+      this.canvas.centerObject(image);
+    }
     //render
     this.canvas.renderAll();
   };
 
   componentDidMount = () => {
-    console.log("mounting", this.canvasWrapperRef.clientHeight);
     let canvasWidth = this.canvasWrapperRef.clientWidth;
     let canvasHeight = this.canvasWrapperRef.clientHeight;
     //create canvas
-    this.canvas = new fabric.StaticCanvas("canvas", {
+    this.canvas = new fabric.Canvas("main-canvas", {
       selection: false,
-      backgroundColor: "black",
       hoverCursor: "context-menu",
       height: canvasHeight,
       width: canvasWidth,
     });
-    let image = this.props.image;
-    //scale image
-    this.scaleImage(image, canvasWidth, canvasHeight);
-    image.set({ selectable: false });
-    this.canvas.add(image);
-    this.canvas.centerObject(image);
-    this.canvas.renderAll();
-    console.log(this.canvasWrapperRef.clientHeight);
-    //register resive event listener
+    this.props.handleCanvasCreation(this.canvas);
     window.addEventListener("resize", this.updateDimensions);
   };
 
   componentDidUpdate = () => {
     let image = this.canvas._objects[0];
+    if (image === undefined && this.props.image === null) {
+      //image is not yet set
+      return;
+    } else {
+      //canvas empty, add image
+      let canvasWidth = this.canvasWrapperRef.clientWidth;
+      let canvasHeight = this.canvasWrapperRef.clientHeight;
+      image = this.props.image;
+      image.set({ selectable: false });
+      this.scaleImage(image, canvasWidth, canvasHeight);
+      this.canvas.add(image);
+      this.canvas.centerObject(image);
+    }
     image.filters = [];
     this.applyFilters();
     this.applySliders();
     image.applyFilters();
     this.canvas.renderAll();
-  };
-
-  //remove the window event listener on unmount
-  componentWillUnmount = () => {
-    window.removeEventListener("resize", this.updateDimensions);
   };
 
   scaleImage = (image, width, height) => {
@@ -100,10 +99,10 @@ class Canvas extends Component {
         ref={(wrapper) => {
           this.canvasWrapperRef = wrapper;
         }}
-        id="main-canvas-wrapper"
-        className="row justify-content-center flex-grow-1 "
+        id="canvas-wrapper"
+        className="bg-secondary flex-grow-1"
       >
-        <canvas id="canvas" />
+        <canvas id="main-canvas" className="bg-transparent" />
       </div>
     );
   };

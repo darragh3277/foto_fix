@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import Canvas from "./components/Canvas/Canvas";
-import Header from "./components/Header/Header";
 import Controls from "./components/Controls/Controls";
-import Upload from "./components/Upload/Upload";
+import Upload from "./components/Modals/Upload/Upload";
+import { MdLinkedCamera } from "react-icons/md";
 import { sliders, filters } from "./filters/Filters";
-import { Container, Row, Col } from "reactstrap";
+import { Container } from "reactstrap";
 import { fabric } from "fabric";
 import "./App.css";
 
@@ -16,11 +16,13 @@ class App extends Component {
     super();
     this.selectedIndex = null;
     this.state = {
+      showModal: true,
       image: null,
       previewImage: null,
       loading: false,
       filters,
       sliders,
+      canvas: null,
     };
   }
 
@@ -66,18 +68,19 @@ class App extends Component {
     let imageUrl = await this.resizeImage(textureSize, objectUrl);
     let previewImageUrl = await this.resizeImage(previewImageSize, objectUrl);
     fabric.Image.fromURL(imageUrl, (image) => {
-      this.setState({
-        image,
-      });
-    });
-    fabric.Image.fromURL(previewImageUrl, (previewImage) => {
-      this.setState({
-        previewImage,
+      fabric.Image.fromURL(previewImageUrl, (previewImage) => {
+        this.setState({
+          image,
+          previewImage,
+          showModal: false,
+          loading: false,
+        });
       });
     });
   };
 
   handleClearCanvas = () => {
+    this.state.canvas.clear();
     let sliders = this.state.sliders;
     for (let i = 0; i < sliders.length; i++) {
       sliders[i].value = sliders[i].defaultValue;
@@ -92,6 +95,7 @@ class App extends Component {
       loading: false,
       filters,
       sliders,
+      showModal: true,
     });
   };
 
@@ -142,30 +146,38 @@ class App extends Component {
     });
   };
 
+  handleCanvasCreation = (canvas) => {
+    this.setState({
+      canvas,
+    });
+  };
+
   render = () => {
-    let display = <Upload onChange={this.handleImageUpload} />;
-    if (
-      this.state.loading &&
-      this.state.image === null &&
-      this.state.previewImage === null
-    ) {
-      display = (
-        <div className="row justify-content-center mt-5">
-          <div className="spinner-border text-light" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-        </div>
-      );
-    } else if (this.state.image !== null && this.state.previewImage !== null) {
-      display = (
-        <>
+    return (
+      <>
+        <Container
+          fluid
+          id="main-container"
+          className="min-vh-100 bg-dark d-flex flex-column p-0"
+        >
+          {/* Header */}
+          <nav className="navbar navbar-dark bg-dark shadow border-bottom border-dark">
+            <span className="navbar-brand mb-0 h1">
+              <MdLinkedCamera className="mb-1 mr-1" />
+              FotoFix
+            </span>
+          </nav>
+          {/* Canvas */}
           <Canvas
             image={this.state.image}
             filters={this.state.filters}
             sliders={this.state.sliders}
+            handleCanvasCreation={this.handleCanvasCreation}
           />
+          {/* Controls */}
           <Controls
             image={this.state.previewImage}
+            loading={this.state.loading}
             sliders={this.state.sliders}
             filters={this.state.filters}
             handleFilterToggle={this.handleFilterToggle}
@@ -175,18 +187,13 @@ class App extends Component {
             handleSave={this.handleSave}
             selectedIndex={this.selectedIndex}
           />
-        </>
-      );
-    }
-    return (
-      <Container fluid className="bg-dark min-vh-100 d-flex flex-column">
-        <Row className="justify-content-center min-vh-100">
-          <Col xs={12} sm={10} md={8} className="d-flex flex-column min-vh-100">
-            <Header />
-            {display}
-          </Col>
-        </Row>
-      </Container>
+          <Upload
+            showModal={this.state.showModal}
+            handleImageUpload={this.handleImageUpload}
+            loading={this.state.loading}
+          />
+        </Container>
+      </>
     );
   };
 }

@@ -18,7 +18,9 @@ class FilterPreview extends Component {
     });
     let image = this.props.image;
     image.set({ selectable: false });
-    image.scaleToWidth(this.width);
+    image.width >= image.height
+      ? image.scaleToHeight(this.height)
+      : image.scaleToWidth(this.width);
     this.setupFilters();
     image.applyFilters();
     canvas.add(image);
@@ -58,7 +60,7 @@ class FilterPreview extends Component {
         ></canvas>
         <p
           className="text-light text-center label my-1"
-          onClick={(e) => {
+          onClick={() => {
             this.props.handleFilterToggle(
               this.props.filter,
               this.props.selectedIndex

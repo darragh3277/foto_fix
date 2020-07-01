@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import FilterStrip from "../FilterStrip/FilterStrip";
-import Sliders from "../Sliders/Sliders";
-import { Row, Button } from "reactstrap";
+import Sliders from "./Sliders/Sliders";
+import ControlButtons from "./ControlButtons/ControlButtons";
+import "./Controls.css";
 
 export default ({
   image,
@@ -13,47 +14,60 @@ export default ({
   selectedIndex,
   filters,
   sliders,
+  loading,
 }) => {
+  const [filterActive, setFilterActive] = useState(true);
+  let display = null;
+  if (loading === false && image !== null) {
+    if (filterActive) {
+      display = (
+        <FilterStrip
+          image={image}
+          handleFilterToggle={handleFilterToggle}
+          filters={filters}
+          selectedIndex={selectedIndex}
+        />
+      );
+    } else {
+      display = (
+        <Sliders handleSliderChange={handleSliderChange} sliders={sliders} />
+      );
+    }
+  }
   return (
     <>
-      <FilterStrip
-        image={image}
-        handleFilterToggle={handleFilterToggle}
-        filters={filters}
-        selectedIndex={selectedIndex}
+      <div
+        className="btn-group border border-dark"
+        role="group"
+        aria-label="Basic example"
+      >
+        <button
+          type="button"
+          className={
+            "btn btn-secondary rounded-0 " + (filterActive && "active")
+          }
+          onClick={() => setFilterActive(true)}
+        >
+          Filter
+        </button>
+        <button
+          type="button"
+          className={
+            "btn btn-secondary rounded-0 " + (!filterActive && "active")
+          }
+          onClick={() => setFilterActive(false)}
+        >
+          Edit
+        </button>
+      </div>
+      <div id="controls-wrapper" className="border-top border-dark">
+        {display}
+      </div>
+      <ControlButtons
+        handleResetImage={handleResetImage}
+        handleClearCanvas={handleClearCanvas}
+        handleSave={handleSave}
       />
-      <Row className="mt-2">
-        <Sliders handleSliderChange={handleSliderChange} sliders={sliders} />
-      </Row>
-      <Row className="justify-content-center m-2">
-        <Button
-          onClick={handleSave}
-          outline
-          color="light"
-          size="sm"
-          className="m-1"
-        >
-          Save
-        </Button>
-        <Button
-          onClick={handleResetImage}
-          outline
-          color="light"
-          size="sm"
-          className="m-1"
-        >
-          Reset
-        </Button>
-        <Button
-          onClick={handleClearCanvas}
-          outline
-          color="danger"
-          size="sm"
-          className="m-1"
-        >
-          New Image
-        </Button>
-      </Row>
     </>
   );
 };

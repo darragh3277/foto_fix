@@ -1,6 +1,6 @@
 import React from "react";
 import FilterPreview from "../FilterPreview/FilterPreview";
-import { Row, Col } from "reactstrap";
+import { Col } from "reactstrap";
 import Flickity from "react-flickity-component";
 import "./Flickity.css";
 
@@ -31,19 +31,17 @@ export default ({ image, filters, handleFilterToggle, selectedIndex }) => {
   }
   flickityOptions.initialIndex = selectedIndex;
   return (
-    <Row>
-      <Col className="mt-2 px-0">
-        <Flickity
-          className={"carousel"} // default ''
-          elementType={"div"} // default 'div'
-          options={flickityOptions} // takes flickity options {}
-          disableImagesLoaded={false} // default false
-          reloadOnUpdate // default false
-          static // default false
-        >
-          {fliterPreviews(filters, image, handleFilterToggle)}
-        </Flickity>
-      </Col>
-    </Row>
+    <Col className="m-0 px-0">
+      <Flickity
+        className={"carousel"} // default ''
+        elementType={"div"} // default 'div'
+        options={flickityOptions} // takes flickity options {}
+        disableImagesLoaded={false} // default false
+        reloadOnUpdate // default false
+        static // default false
+      >
+        {fliterPreviews(filters, image, handleFilterToggle)}
+      </Flickity>
+    </Col>
   );
 };
