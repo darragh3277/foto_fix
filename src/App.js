@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Canvas from "./components/Canvas/Canvas";
 import Controls from "./components/Controls/Controls";
-import Upload from "./components/Upload/Upload";
+import Upload from "./components/Modals/Upload/Upload";
 import { MdLinkedCamera } from "react-icons/md";
 import { sliders, filters } from "./filters/Filters";
 import { Container } from "reactstrap";
