@@ -1,71 +1,7 @@
 import React, { useState } from "react";
 import FilterStrip from "../FilterStrip/FilterStrip";
 import Sliders from "../Sliders/Sliders";
-import { Row, Button } from "reactstrap";
-
-const controlPanel = (
-  filterActive,
-  image,
-  handleFilterToggle,
-  handleSliderChange,
-  selectedIndex,
-  filters,
-  sliders
-) => {
-  if (filterActive) {
-    return (
-      <FilterStrip
-        image={image}
-        handleFilterToggle={handleFilterToggle}
-        filters={filters}
-        selectedIndex={selectedIndex}
-      />
-    );
-  } else {
-    return (
-      <Row className="m-0">
-        <Sliders handleSliderChange={handleSliderChange} sliders={sliders} />
-      </Row>
-    );
-  }
-};
-
-const controlButtons = ({
-  handleSave,
-  handleResetImage,
-  handleClearCanvas,
-}) => {
-  return (
-    <Row className="justify-content-center m-2">
-      <Button
-        onClick={handleSave}
-        outline
-        color="light"
-        size="sm"
-        className="m-1"
-      >
-        Save
-      </Button>
-      <Button
-        onClick={handleResetImage}
-        outline
-        color="light"
-        size="sm"
-        className="m-1"
-      >
-        Reset
-      </Button>
-      <Button
-        onClick={handleClearCanvas}
-        color="danger"
-        size="sm"
-        className="m-1"
-      >
-        New Image
-      </Button>
-    </Row>
-  );
-};
+import ControlButtons from "./ControlButtons/ControlButtons";
 
 export default ({
   image,
@@ -82,15 +18,20 @@ export default ({
   const [filterActive, setFilterActive] = useState(true);
   let display = null;
   if (loading === false && image !== null) {
-    display = controlPanel(
-      filterActive,
-      image,
-      handleFilterToggle,
-      handleSave,
-      selectedIndex,
-      filters,
-      sliders
-    );
+    if (filterActive) {
+      display = (
+        <FilterStrip
+          image={image}
+          handleFilterToggle={handleFilterToggle}
+          filters={filters}
+          selectedIndex={selectedIndex}
+        />
+      );
+    } else {
+      display = (
+        <Sliders handleSliderChange={handleSliderChange} sliders={sliders} />
+      );
+    }
   }
   return (
     <>
@@ -121,7 +62,11 @@ export default ({
       <div id="controls-wrapper" className="border-top border-dark">
         {display}
       </div>
-      {controlButtons(handleResetImage, handleClearCanvas, handleSliderChange)}
+      <ControlButtons
+        handleResetImage={handleResetImage}
+        handleClearCanvas={handleClearCanvas}
+        handleSave={handleSave}
+      />
     </>
   );
 };

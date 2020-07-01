@@ -1,5 +1,5 @@
 import React from "react";
-import { Col } from "reactstrap";
+import { Col, Row } from "reactstrap";
 import Slider from "../Slider/Slider";
 import "./Sliders.css";
 
@@ -11,5 +11,11 @@ export default ({ handleSliderChange, sliders }) => {
       </Col>
     );
   });
-  return <>{sliderComponents}</>;
+  return (
+    <Row className="mt-2 justify-content-center">
+      <Col xs={8}>
+        <Row>{sliderComponents}</Row>
+      </Col>
+    </Row>
+  );
 };

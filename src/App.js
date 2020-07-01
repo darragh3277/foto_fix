@@ -21,6 +21,7 @@ class App extends Component {
       loading: false,
       filters,
       sliders,
+      canvas: null,
     };
   }
 
@@ -78,6 +79,7 @@ class App extends Component {
   };
 
   handleClearCanvas = () => {
+    this.state.canvas.clear();
     let sliders = this.state.sliders;
     for (let i = 0; i < sliders.length; i++) {
       sliders[i].value = sliders[i].defaultValue;
@@ -92,6 +94,7 @@ class App extends Component {
       loading: false,
       filters,
       sliders,
+      showModal: true,
     });
   };
 
@@ -142,6 +145,12 @@ class App extends Component {
     });
   };
 
+  handleCanvasCreation = (canvas) => {
+    this.setState({
+      canvas,
+    });
+  };
+
   render = () => {
     return (
       <>
@@ -159,6 +168,7 @@ class App extends Component {
             image={this.state.image}
             filters={this.state.filters}
             sliders={this.state.sliders}
+            handleCanvasCreation={this.handleCanvasCreation}
           />
           {/* Controls */}
           <Controls

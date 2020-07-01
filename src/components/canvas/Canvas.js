@@ -35,6 +35,7 @@ class Canvas extends Component {
       height: canvasHeight,
       width: canvasWidth,
     });
+    this.props.handleCanvasCreation(this.canvas);
     window.addEventListener("resize", this.updateDimensions);
   };
 
