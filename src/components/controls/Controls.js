@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FilterStrip from "../FilterStrip/FilterStrip";
+import FilterStrip from "./FilterStrip/FilterStrip";
 import Sliders from "./Sliders/Sliders";
 import ControlButtons from "./ControlButtons/ControlButtons";
 import "./Controls.css";
